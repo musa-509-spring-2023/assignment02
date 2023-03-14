@@ -34,7 +34,7 @@ running the following command from the command line:
 alter table septa.bus_stops
 add column if not exists geog geography;
 
-update septa_bus_stops
+update septa.bus_stops
 set geog = st_makepoint(stop_lon, stop_lat)::geography;
 
 -- Create an index on the geog column.

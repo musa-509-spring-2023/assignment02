@@ -199,7 +199,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Description: In this question, I used the number of wheelchairs accessible bus stops in each neighborhood as my metric for evaluating neighborhoods. Based on the result of my code, I found Overbrook neighborhood as the most accessible neighborhood.**
+    
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 

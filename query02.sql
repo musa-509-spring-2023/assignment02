@@ -9,7 +9,7 @@ septa_bus_stop_blockgroups AS (
 		stops.geog,
         '1500000US' || bg."GEOID" AS geoid
     FROM septa.bus_stops AS stops
-    INNER JOIN census.blockgroups_2020 AS bg
+    INNER JOIN census.blockgroups_2020 AS bg 
         ON st_dwithin(stops.geog, bg.geog, 800)
 ),
 

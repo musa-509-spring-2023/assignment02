@@ -68,6 +68,20 @@ COPY septa.rail_stops
 FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_rail/stops.csv'
 WITH (FORMAT csv, HEADER true);
 
+-- SEPTA CALENDAR
+CREATE TABLE septa.calendar (
+    monday INTEGER,
+    tuesday INTEGER,
+    wednesday INTEGER,
+    thursday INTEGER,
+    friday INTEGER,
+    saturday INTEGER,
+    sunday INTEGER
+);
+COPY septa.calendar
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_bus/calendar.csv'
+WITH (FORMAT csv, HEADER true);
+
 -- CENSUS
 CREATE TABLE census.population_2020 (
     geoid TEXT,

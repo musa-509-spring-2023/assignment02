@@ -51,7 +51,7 @@ from rail
     bus.geog <-> st_setsrid(rail.geog::geography, 4326)::geography as min_distance
     from septa.bus_stops as bus
     where wheelchair_boarding = 1
-    order by min_distance
+    order by min_distance asc
     limit 1
   ) closest_accessible_stops
   ORDER BY min_distance DESC
@@ -64,5 +64,5 @@ round(min_distance) || ' meters to nearest wheelchair-accessible bus stop'::text
 stop_lon::DOUBLE PRECISION,
 stop_lat::DOUBLE PRECISION
 from rail_stop_neighbors
-order by stop_desc desc
+order by stop_name
 limit 10;

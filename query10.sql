@@ -25,13 +25,14 @@ My description provides the number of meters to the rail stop's nearest wheelcha
 */
 
 --explain 
-with rail as (select
-stop_id,
-stop_name,
-stop_lon,
-stop_lat,
-st_setsrid(st_makepoint(stop_lon, stop_lat), 4326) as geog
-from septa.rail_stops
+with rail as (
+  select
+    stop_id,
+    stop_name,
+    stop_lon,
+    stop_lat,
+    st_setsrid(st_makepoint(stop_lon, stop_lat), 4326) as geog
+  from septa.rail_stops
 ),
 
 rail_stop_neighbors as (

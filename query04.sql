@@ -40,48 +40,48 @@ Structure:
 
 
 --EXPLAIN
-with trip_lengths as(
-    SELECT
-    shape_id,
-    shape_geom as shape_geog,
-    st_length(shape_geom) as line_distance
+with trip_lengths as (
+    select
+        shape_id,
+        shape_geom as shape_geog,
+        st_length(shape_geom) as line_distance
     from septa.shape_geogs
     group by shape_id, shape_geom
-    order by line_distance DESC
+    order by line_distance desc
     limit 2
 ),
 
-shape_trips_combo as(
+shape_trips_combo as (
     select
-    trip_lengths.shape_id,
-    trip_lengths.shape_geog,
-    trip_lengths.line_distance,
-    bus_trips.shape_id,
-    bus_trips.route_id,
-    bus_trips.trip_headsign
-    from trip_lengths 
+        trip_lengths.shape_id,
+        trip_lengths.shape_geog,
+        trip_lengths.line_distance,
+        bus_trips.shape_id,
+        bus_trips.route_id,
+        bus_trips.trip_headsign
+    from trip_lengths
     inner join septa.bus_trips
-    on trip_lengths.shape_id = bus_trips.shape_id
+        on trip_lengths.shape_id = bus_trips.shape_id
     group by trip_lengths.shape_id, trip_lengths.shape_geog, trip_lengths.line_distance, bus_trips.shape_id, bus_trips.route_id, bus_trips.trip_headsign
-    order by line_distance DESC
+    order by line_distance desc
 ),
 
-routes_combo as(
+routes_combo as (
     select
-    shape_trips_combo.shape_geog,
-    shape_trips_combo.line_distance,
-    shape_trips_combo.route_id,
-    shape_trips_combo.trip_headsign,
-    bus_routes.route_id,
-    bus_routes.route_short_name
+        shape_trips_combo.shape_geog,
+        shape_trips_combo.line_distance,
+        shape_trips_combo.route_id,
+        shape_trips_combo.trip_headsign,
+        bus_routes.route_id,
+        bus_routes.route_short_name
     from shape_trips_combo
     inner join septa.bus_routes
-    on shape_trips_combo.route_id = bus_routes.route_id
+        on shape_trips_combo.route_id = bus_routes.route_id
 )
 
-SELECT
-route_short_name::text,
-trip_headsign::text,
-shape_geog::geography,
-line_distance::DOUBLE PRECISION as shape_length
+select
+    route_short_name::text,
+    trip_headsign::text,
+    shape_geog::geography,
+    line_distance::double precision as shape_length
 from routes_combo;

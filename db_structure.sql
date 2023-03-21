@@ -176,3 +176,20 @@ GROUP BY shape_id;
 create index if not exists septa_shapes__geog__idx
 on septa.shape_geogs using gist
 (shape_geom);
+
+
+-- Add a column to the septa.rail_stops table to store the geometry of each stop.
+-- alter table septa.rail_stops
+-- add column if not exists geog geography;
+
+-- -- create geog for rail stops:
+-- INSERT INTO septa.rail_stops
+-- SELECT stop_id, ST_MakePoint(array_agg(
+--   ST_SetSRID(ST_MakePoint(stop_lon, stop_lat),4326)
+--   FROM septa.rail_Stops
+-- GROUP BY stop_id;
+
+-- -- create spatial index for rail stops:
+-- create index if not exists septa_rail_stops__geog__idx
+-- on septa.rail_stops using gist
+-- (geog);

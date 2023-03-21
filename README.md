@@ -225,7 +225,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion: The main campus of the University of Pennsylvania is located in University City from Schuylkill River to 40th Street. The campus is spread out and covers nearly the entire University City neighborhood. Thus, I used azavea.neighborhoods dataset to define Penn's campus, and select the data that has the name 'University City' in it. **
+    **Discussion: The main campus of the University of Pennsylvania is located in University City from Schuylkill River to 40th Street. The campus is spread out and covers nearly the entire University City neighborhood. Thus, I used azavea.neighborhoods dataset to define Penn's campus, and select the data that has the name 'University City'. **
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

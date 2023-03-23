@@ -1,0 +1,257 @@
+create extension postgis
+
+create septa schema
+
+-------------------------------------------------------------
+
+ogr2ogr `
+  -f "PostgreSQL" `
+  -nln "septa.bus_stops" `
+  -lco "OVERWRITE=yes" `
+  -lco "GEOM_TYPE=geography" `
+  -lco "GEOMETRY_NAME=geog" `
+  PG:"host=localhost port=5432 dbname=Assignment2 user=postgres password=K9737458k!" `
+  "stops.txt"
+
+-------------------------------------------------------------
+
+ogr2ogr `
+-f "PostgreSQL" `
+PG:"host=localhost port=5432 dbname=Assignment2 user=postgres password=K9737458k!" `
+-nln phl.pwd_parcels `
+-nlt MULTIPOLYGON `
+-t_srs EPSG:4326 `
+-lco GEOMETRY_NAME=geog `
+-lco GEOM_TYPE=GEOGRAPHY `
+-overwrite `
+"PWD_PARCELS.shp"
+
+-------------------------------------------------------------
+
+ogr2ogr `
+-f "PostgreSQL" `
+PG:"host=localhost port=5432 dbname=Assignment2 user=postgres password=K9737458k!" `
+-nln phl.pwd_parcels `
+-nlt MULTIPOLYGON `
+-lco GEOMETRY_NAME=geog `
+-lco GEOM_TYPE=GEOGRAPHY `
+-overwrite `
+"PWD_PARCELS.shp"
+
+-------------------------------------------------------------
+
+ogr2ogr `
+    -f "PostgreSQL" `
+    PG:"host=localhost port=5432 dbname=Assignment2 user=postgres password=K9737458k!" `
+    -nln azavea.neighborhoods `
+    -nlt MULTIPOLYGON `
+    -lco GEOMETRY_NAME=geog `
+    -lco GEOM_TYPE=GEOGRAPHY `
+    -overwrite `
+    "Neighborhoods_Philadelphia.geojson"
+
+-------------------------------------------------------------
+
+ogr2ogr `
+    -f "PostgreSQL" `
+    PG:"host=localhost port=5432 dbname=Assignment2 user=postgres password=K9737458k!" `
+    -nln census.blockgroups_2020 `
+    -nlt MULTIPOLYGON `
+    -lco GEOMETRY_NAME=geog `
+    -lco GEOM_TYPE=GEOGRAPHY `
+    -overwrite `
+    "tl_2020_42_bg.shp"
+
+-------------------------------------------------------------
+
+DROP TABLE IF EXISTS septa.bus_stops;
+
+CREATE TABLE septa.bus_stops (
+    stop_id TEXT,
+    stop_name TEXT,
+    stop_lat DOUBLE PRECISION,
+    stop_lon DOUBLE PRECISION,
+    location_type TEXT,
+    parent_station TEXT,
+    zone_id TEXT,
+    wheelchair_boarding INTEGER
+);
+
+COPY septa.bus_stops
+FROM 'C:/Users/vestalk/Desktop/google_bus/stops.txt'
+WITH (FORMAT csv, HEADER true);
+
+-------------------------------------------------------------
+
+DROP TABLE IF EXISTS septa.bus_routes;
+
+CREATE TABLE septa.bus_routes (
+    route_id TEXT,
+    route_short_name TEXT,
+    route_long_name TEXT,
+    route_type TEXT,
+    route_color TEXT,
+    route_text_color TEXT,
+    route_url TEXT
+);
+
+COPY septa.bus_routes
+FROM 'C:/Users/vestalk/Desktop/google_bus/routes.csv'
+WITH (FORMAT csv, HEADER true);
+
+-------------------------------------------------------------
+
+DROP TABLE IF EXISTS septa.bus_trips;
+
+CREATE TABLE septa.bus_trips (
+    route_id TEXT,
+    service_id TEXT,
+    trip_id TEXT,
+    trip_headsign TEXT,
+    block_id TEXT,
+    direction_id TEXT,
+    shape_id TEXT
+);
+
+COPY septa.bus_trips
+FROM 'C:/Users/vestalk/Desktop/google_bus/trips.csv'
+WITH (FORMAT csv, HEADER true);
+
+-------------------------------------------------------------
+
+DROP TABLE IF EXISTS septa.bus_shapes;
+
+CREATE TABLE septa.bus_shapes (
+    shape_id TEXT,
+    shape_pt_lat DOUBLE PRECISION,
+    shape_pt_lon DOUBLE PRECISION,
+    shape_pt_sequence INTEGER
+);
+
+COPY septa.bus_shapes
+FROM 'C:/Users/vestalk/Desktop/google_bus/shapes.csv'
+WITH (FORMAT csv, HEADER true);
+
+
+-------------------------------------------------------------
+
+DROP TABLE IF EXISTS septa.rail_stops;
+
+CREATE TABLE septa.rail_stops (
+    stop_id TEXT,
+    stop_name TEXT,
+    stop_desc TEXT,
+    stop_lat DOUBLE PRECISION,
+    stop_lon DOUBLE PRECISION,
+    zone_id TEXT,
+    stop_url TEXT
+);
+
+COPY septa.rail_stops
+FROM 'C:/Users/vestalk/Desktop/google_bus/stops_rail.csv'
+WITH (FORMAT csv, HEADER true);
+
+-------------------------------------------------------------
+
+DROP TABLE IF EXISTS census.population_2020;
+
+CREATE TABLE census.population_2020 (
+    geoid TEXT,
+    geoname TEXT,
+    total INTEGER
+);
+
+COPY census.population_2020
+FROM 'C:/Users/vestalk/Desktop/123.csv'
+WITH (FORMAT csv, HEADER true);
+
+-------------------------------------------------------------
+
+-- Add a new geography column "geog" to the existing table
+ALTER TABLE septa.bus_stops ADD COLUMN geog GEOGRAPHY(Point, 4326);
+
+-- Update the "geog" column with geography data
+UPDATE septa.bus_stops SET geog = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat), 4326);
+
+-------------------------------------------------------------
+
+-- Blockgroup geography srid 900915 change to 4326
+
+ALTER TABLE census.blockgroups_2020 ADD COLUMN geog_4326 geography(Geometry, 4326);
+UPDATE census.blockgroups_2020 SET geog_4326 = ST_Transform(geog::geometry, 4326)::geography;
+ALTER TABLE census.blockgroups_2020 DROP COLUMN geog;
+ALTER TABLE census.blockgroups_2020 RENAME COLUMN geog_4326 TO geog;
+
+
+-------------------------------------------------------------
+
+-- blockgroup population
+
+CREATE TABLE census.population_2020 (
+    geoid TEXT,
+    geoname TEXT,
+    total INTEGER
+);
+
+DROP TABLE IF EXISTS temp_csv_import;
+
+CREATE TEMP TABLE temp_csv_import (
+    GEO_ID TEXT,
+    NAME TEXT,
+    P1_001N INTEGER);
+
+COPY temp_csv_import (GEO_ID, NAME, P1_001N)
+FROM 'C:/Users/vestalk/Desktop/123.csv'
+WITH (FORMAT csv, HEADER true);
+
+INSERT INTO census.population_2020 (geoid, geoname, total)
+SELECT GEO_ID, NAME, P1_001N
+FROM temp_csv_import;
+
+DROP TABLE temp_csv_import;
+
+UPDATE census.population_2020
+SET geoid = REPLACE(geoid, '1500000US', '')
+
+--------------------------------
+
+/*
+ Which **eight** bus stops have the smallest population above 500 people _inside of Philadelphia_ within 800 meters of the stop (Philadelphia county block groups have a geoid prefix of `42101` -- that's `42` for the state of PA, and `101` for Philadelphia county)?
+ */
+
+
+WITH
+
+ -- bus stop inside philly
+
+bus_stop_philly as (SELECT b.*
+FROM septa.bus_stops AS b
+JOIN azavea.neighborhoods AS n
+ON ST_Within(b.geog::geometry, n.geog::geometry)
+),
+
+ -- join censusblock with population on geoid
+
+census_block_pop as (
+
+SELECT blocks.geoid, pops.total, blocks.geog
+FROM census.blockgroups_2020 as blocks
+INNER JOIN census.population_2020 as pops using (geoid)
+
+)
+
+ -- censusblock whitin 800m
+
+SELECT *
+FROM bus_stop_philly AS b
+INNER JOIN census_block_pop AS p
+ON ST_dWithin(b.geog::geometry, p.geog::geometry, 800)
+
+
+---------------------------------------------------------
+ --check buffer
+
+SELECT ST_Buffer(b.geog::geometry, 0.008) AS buffer_geom
+FROM septa.bus_stops AS b
+JOIN azavea.neighborhoods AS n
+ON ST_Within(b.geog::geometry, n.geog::geometry)

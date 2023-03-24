@@ -17,19 +17,38 @@ nhood AS (
 stops_nhood AS (
 	SELECT
 		nhood.neighborhood,
-		COUNT(stops.stop_id) AS total_bus_stops,
-		SUM(stops.wheelchair_boarding) AS wheelchair_boarding
+		stops.stop_id AS stop_id,
+		stops.wheelchair_boarding AS wheelchair_boarding
 	FROM nhood
 	INNER JOIN stops ON st_intersects(stops.geog, nhood.geog)
-	GROUP BY nhood.neighborhood)
+	GROUP BY nhood.neighborhood, stops.stop_id, stops.wheelchair_boarding)
 
 SELECT 
 	stops_nhood.neighborhood,
-	stops_nhood.total_bus_stops AS prop_stops,
-	AVG(stops_nhood.wheelchair_boarding) / SUM(stops_nhood.wheelchair_boarding) AS prop_wheelchair_boarding
+	count(stops_nhood.stop_id) AS number_of_stops,
+	COUNT(stops_nhood.wheelchair_boarding)  AS number_of_wb
 FROM stops_nhood
-GROUP BY stops_nhood.neighborhood, stops_nhood.total_bus_stops
+GROUP BY stops_nhood.neighborhood
 
+WITH
+accessible AS (
+	SELECT 
+		COUNT(wheelchair_boarding) AS is_accessible,
+		ST_transform(geog::geometry, 2272) AS geog
+	FROM septa.bus_stops
+	WHERE wheelchair_boarding = 1
+	GROUP BY geog),
+	
+inaccessible AS (
+	SELECT 
+		COUNT(wheelchair_boarding) AS not_accessible,
+		ST_transform(geog::geometry, 2272) AS geog
+	FROM septa.bus_stops
+	WHERE wheelchair_boarding = 2
+	GROUP BY geog)
+
+SELECT * from inaccessible
+-- SELECT * FROM septa.bus_stops
 -- bus stops is 8185
 -- wheelchair boarding is 8483
 -- Join bus stops to neighborhoods || select sum of stops and wheelchair boarding grouped by neighborhood

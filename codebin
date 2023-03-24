@@ -255,3 +255,45 @@ SELECT ST_Buffer(b.geog::geometry, 0.008) AS buffer_geom
 FROM septa.bus_stops AS b
 JOIN azavea.neighborhoods AS n
 ON ST_Within(b.geog::geometry, n.geog::geometry)
+
+
+----------------------------------------------------------
+
+WITH
+
+ -- bus stop inside philly
+
+bus_stop_philly as (SELECT b.*
+FROM septa.bus_stops AS b
+INNER JOIN azavea.neighborhoods AS n
+ON ST_Within(ST_Transform(b.geog::geometry, 3857), ST_Transform(n.geog::geometry, 3857))
+),
+
+ -- join censusblock with population on geoid
+
+census_block_pop as (
+
+SELECT blocks.geoid, pops.total, blocks.geog
+FROM census.blockgroups_2020 as blocks
+INNER JOIN census.population_2020 as pops using (geoid)
+
+),
+
+ -- censusblock within 800m
+
+bus_stops_800_pop as (
+SELECT b.stop_id, sum(p.total) as estimated_pop_800m
+FROM bus_stop_philly AS b
+INNER JOIN census_block_pop AS p
+ON ST_dWithin(ST_Transform(b.geog::geometry, 3857), ST_Transform(p.geog::geometry, 3857), 800)
+GROUP BY b.stop_id
+)
+
+ -- select smallest above 500
+
+SELECT pop.stop_id, pop.estimated_pop_800m, stops.geog
+FROM bus_stops_800_pop AS pop
+INNER JOIN bus_stop_philly AS stops using(stop_id)
+WHERE estimated_pop_800m > 500
+ORDER BY estimated_pop_800m
+LIMIT 8

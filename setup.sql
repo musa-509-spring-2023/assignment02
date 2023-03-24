@@ -12,7 +12,7 @@ CREATE TABLE septa.bus_stops (
     wheelchair_boarding INTEGER
 );
 COPY septa.bus_stops
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_bus/stops.txt'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/gtfs_public/google_bus/stops.txt'
 WITH (FORMAT csv, HEADER true);
 
 -- SEPTA BUS ROUTES
@@ -26,7 +26,7 @@ CREATE TABLE septa.bus_routes (
     route_url TEXT
 );
 COPY septa.bus_routes
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_bus/routes.csv'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/gtfs_public/google_bus/routes.csv'
 WITH (FORMAT csv, HEADER true);
 
 -- SEPTA BUS TRIPS
@@ -40,7 +40,7 @@ CREATE TABLE septa.bus_trips (
     shape_id TEXT
 );
 COPY septa.bus_trips
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_bus/trips.csv'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/gtfs_public/google_bus/trips.csv'
 WITH (FORMAT csv, HEADER true);
 
 -- SEPTA BUS SHAPES
@@ -51,7 +51,7 @@ CREATE TABLE septa.bus_shapes (
     shape_pt_sequence INTEGER
 );
 COPY septa.bus_shapes
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_bus/shapes.csv'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/gtfs_public/google_bus/shapes.csv'
 WITH (FORMAT csv, HEADER true);
 
 -- SEPTA RAIL STOPS
@@ -65,21 +65,24 @@ CREATE TABLE septa.rail_stops (
     stop_url TEXT
 );
 COPY septa.rail_stops
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_rail/stops.csv'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/gtfs_public/google_rail/stops.csv'
 WITH (FORMAT csv, HEADER true);
 
 -- SEPTA CALENDAR
 CREATE TABLE septa.calendar (
-    monday INTEGER,
+    service_id INTEGER,
+	monday INTEGER,
     tuesday INTEGER,
     wednesday INTEGER,
     thursday INTEGER,
     friday INTEGER,
     saturday INTEGER,
-    sunday INTEGER
+    sunday INTEGER,
+	start_date DATE,
+	end_date DATE
 );
 COPY septa.calendar
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/gtfs_public/google_bus/calendar.csv'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/gtfs_public/google_bus/calendar.csv'
 WITH (FORMAT csv, HEADER true);
 
 -- CENSUS
@@ -89,7 +92,7 @@ CREATE TABLE census.population_2020 (
     total INTEGER
 );
 COPY census.population_2020
-FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/DECENNIALPL2020.P1_2023-03-08T224849/census.csv'
+FROM '/Users/myronbanez/Desktop/Coding/MUSA_509/assignment02/assignment02/__data__/DECENNIALPL2020.P1_2023-03-08T224849/census.csv'
 WITH (FORMAT csv, HEADER true);
 SELECT * FROM census.population_2020
 

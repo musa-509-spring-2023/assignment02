@@ -4,40 +4,31 @@
   of the 800 meter buffer.
 */
 
-WITH
+with
 
- -- bus stop inside philly
-
-bus_stop_philly as (SELECT b.*
-FROM septa.bus_stops AS b
-JOIN azavea.neighborhoods AS n
-ON ST_Within(b.geog::geometry, n.geog::geometry)
+septa_bus_stop_blockgroups as (
+    select
+        stops.stop_id,
+        bg.geoid as geoid
+    from septa.bus_stops as stops
+    inner join census.blockgroups_2020 as bg
+        on st_dwithin(st_setsrid(stops.geog::geography, 4326), st_setsrid(bg.geog::geography, 4326), 800)
 ),
 
- -- join censusblock with population on geoid
-
-census_block_pop as (
-
-SELECT blocks.geoid, pops.total, blocks.geog
-FROM census.blockgroups_2020 as blocks
-INNER JOIN census.population_2020 as pops using (geoid)
-
-),
-
- -- censusblock whitin 800m
-
-bus_stops_800_pop as (
-SELECT b.stop_id, sum(p.total) as estimated_pop_800m
-FROM bus_stop_philly AS b
-JOIN census_block_pop AS p
-ON ST_dWithin(b.geog::geometry, p.geog::geometry, 0.008)
-GROUP BY b.stop_id
+septa_bus_stop_surrounding_population as (
+    select
+        stops.stop_id,
+        sum(pop.total) as estimated_pop_800m
+    from septa_bus_stop_blockgroups as stops
+    inner join census.population_2020 as pop using (geoid)
+    group by stops.stop_id
 )
 
- -- select largest
-
-SELECT pop.stop_id, pop.estimated_pop_800m, stops.geog
-FROM bus_stops_800_pop AS pop
-INNER JOIN bus_stop_philly AS stops using(stop_id)
-ORDER BY estimated_pop_800m DESC
-LIMIT 8
+select
+    stops.stop_name,
+    pop.estimated_pop_800m,
+    stops.geog
+from septa_bus_stop_surrounding_population as pop
+inner join septa.bus_stops as stops using (stop_id)
+order by pop.estimated_pop_800m desc
+limit 8;

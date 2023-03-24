@@ -84,4 +84,5 @@ select
     trip_headsign::text,
     shape_geog::geography,
     line_distance::double precision as shape_length
-from routes_combo;
+from routes_combo
+order by shape_length desc;

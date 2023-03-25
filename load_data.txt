@@ -1,0 +1,20 @@
+  ogr2ogr \
+  -f "PostgreSQL" \
+  -nln "phl.pwd_parcels" \
+  -nlt MULTIPOLYGON \
+  -lco "OVERWRITE=yes" \
+  -t_srs EPSG:4326 \
+  -lco "GEOM_TYPE=geography" \
+  -lco "GEOMETRY_NAME=geog" \
+  PG:"host=localhost port=5432 dbname=shoes user=postgres password=postgres" \
+  "/Users/ejs/Geospatial_Cloud/assign_2_data/PWD_PARCELS/PWD_PARCELS.shp"
+
+  ogr2ogr \
+  -f "PostgreSQL" \
+  -nln "census.blockgroups_2020" \
+  -nlt MULTIPOLYGON \
+  -lco "OVERWRITE=yes" \
+  -lco "GEOM_TYPE=geography" \
+  -lco "GEOMETRY_NAME=geog" \
+  PG:"host=localhost port=5432 dbname=shoes user=postgres password=postgres" \
+  "/Users/ejs/Geospatial_Cloud/assign_2_data/tl_2020_42_bg/tl_2020_42_bg.shp"

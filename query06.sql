@@ -93,4 +93,5 @@ select
     count_wc as num_bus_stops_accessible,
     total_stops - count_wc as num_bus_stops_inaccessible
 from wc_metric
-order by accessibility_metric desc;
+order by accessibility_metric desc
+limit 5;

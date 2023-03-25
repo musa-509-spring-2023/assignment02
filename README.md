@@ -201,6 +201,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     **Description:**
 
+    My metric combines the percent of stops within the neighborhood that are accessible, the distance to the next accessible stop, and the density of all stops within the neighborhood. I incorporated stop density because there is no way of knowing where within a neighborhood a personn using a wheelchair may end up living. The more dense the stops are, the greater the likelihood that a person will live near a stop, whether or not it is accessible. All factors are equally weighted, though the class breaks are not perfectly methodological.
+
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
 7.  What are the _bottom five_ neighborhoods according to your accessibility metric?
@@ -225,6 +227,9 @@ There are several datasets that are prescribed for you to use in this part. Your
     ```
 
     **Discussion:**
+    I used the Open Data Philly Universities and Colleges dataset. I fitlered for University of Pennsylvania, and then I narrowed properties down to those within .015 degrees of Meyerson Hall (because that drew a bounding box of Penn properties that best resembled my conception of campus). I could probably get a more accurate outline with something other than an envelope...
+
+    https://www.opendataphilly.org/dataset/philadelphia-universities-and-colleges/resource/1e37f5f0-6212-4cb4-9d87-261b58ae01c4
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

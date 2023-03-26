@@ -140,6 +140,14 @@ COPY septa.rail_stops
 FROM 'C:/Users/vestalk/Desktop/google_bus/stops_rail.csv'
 WITH (FORMAT csv, HEADER true);
 
+-- Add a new geography column "geog" to the existing table
+ALTER TABLE septa.rail_stops 
+ADD COLUMN if not exists geog GEOGRAPHY(Point, 4326);
+
+-- Update the "geog" column with geography data
+UPDATE septa.rail_stops SET geog = ST_SetSRID(ST_MakePoint(stop_lon, stop_lat), 4326);
+
+
 -------------------------------------------------------------------------------
 ---------------census pop------------------------------------------------------
 
@@ -178,6 +186,16 @@ SET geoid = REPLACE(geoid, '1500000US', '')
 CREATE INDEX IF NOT EXISTS blockgroups_2020_geog_idx ON census.blockgroups_2020 USING GIST (geog);
 CREATE INDEX IF NOT EXISTS neighborhoods_geog_idx ON azavea.neighborhoods USING GIST (geog);
 CREATE INDEX IF NOT EXISTS bus_stops_geog_idx ON septa.bus_stops USING GIST (geog);
+CREATE INDEX IF NOT EXISTS rail_stops_geog_idx ON septa.rail_stops USING GIST (geog);
+CREATE INDEX IF NOT EXISTS pwd_parcels_geog_idx ON phl.pwd_parcels USING GIST (geog);
 
+-------------------------------------------------------------------------------
+---------------change srid!!!----------------------------------------
+
+ALTER TABLE phl.pwd_parcels ADD COLUMN geog_4326 geography;
+UPDATE phl.pwd_parcels
+SET geog_4326 = ST_Transform(geog::geometry, 4326)::geography;
+ALTER TABLE phl.pwd_parcels DROP COLUMN geog;
+ALTER TABLE phl.pwd_parcels RENAME COLUMN geog_4326 TO geog;
 
 -------------------------------------------------------------------------------

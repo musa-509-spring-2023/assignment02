@@ -193,9 +193,45 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Description:** The porpotion of bus stops with accessibility for wheelchairs in the neighborhood divided by neighborhood population density
+    ```sql
+    (
+        with
+        pop as(
+        select b.total, a.geog
+        from census.blockgroups_2020 as a 
+	        inner join census.population_2020 as b
+	        on '1500000US' || a.geoid = b.geoid),
+
+        n1 as(
+        select c.name, sum(pop.total) * 1.0 /c.shape_area as pop_density, c.geog
+	
+        from azavea.neighborhoods as c
+	        left join pop
+	        on st_intersects(c.geog, pop.geog)
+        group by c.name, c.shape_area , c.geog),
+        s as(
+            select s.geog,
+            case when wheelchair_boarding = 1 then 1
+            when wheelchair_boarding = 2 then 0
+            else 0 end as wheelchair_boarding
+            from septa.bus_stops s
+        )
+
+        select n1.name as neighborhood_name, 
+                Round((1/ n1.pop_density)* sum(s.wheelchair_boarding)/count(s.wheelchair_boarding)) as accessibility_metric, 
+                sum(s.wheelchair_boarding) as num_bus_stops_accessible,
+                count(s.wheelchair_boarding) as num_bus_stops_inaccessible
+            from n1
+            left join s
+            on st_within(s.geog::geometry, n1.geog::geometry)
+            group by n1.name, n1.pop_density 
+    
+    )
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
+    
+   **"BARTRAM_VILLAGE" "WOODLAND_TERRACE" "GREENWICH" "HAVERFORD_NORTH" "DICKINSON_NARROWS"**
 
 7.  What are the _bottom five_ neighborhoods according to your accessibility metric?
 
@@ -208,6 +244,7 @@ There are several datasets that are prescribed for you to use in this part. Your
       num_bus_stops_inaccessible integer
     )
     ```
+    **"AIRPORT" "NAVY_YARD" "INDUSTRIAL" "CHESTNUT_HILL" "NORTHEAST_AIRPORT"**
 
 8.  With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
@@ -218,7 +255,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    **Discussion: Buffer 550m outward from the core location of the campus defined by Google map(39.95227135017511, -75.19321964138364), and select all block groups intersecting it**
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

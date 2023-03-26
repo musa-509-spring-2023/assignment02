@@ -144,15 +144,15 @@ There are several datasets that are prescribed for you to use in this part. Your
 
 1.  Which **eight** bus stop have the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.
 
-   "stop_name"	"geom"	"estimated_pop_800m"
-   "Lombard St & 18th St"	"0101000020E610000044A51133FBCA52C01B2FDD2406F94340"	57936
-   "Rittenhouse Sq & 18th St "	"0101000020E61000003C2F151BF3CA52C07E74EACA67F94340"	57571
-   "Snyder Av & 9th St "	"0101000020E61000001E1840F850CA52C0BE50C07630F64340"	57412
-   "19th St & Lombard St "	"0101000020E6100000D68C0C7217CB52C0DBF813950DF94340"	57019
-   "Lombard St & 19th St"	"0101000020E61000004968CBB914CB52C0E2E995B20CF94340"	57019
-   "16th St & Locust St "	"0101000020E6100000B2666490BBCA52C0410E4A9869F94340"	56309
-   "Locust St & 16th St "	"0101000020E6100000E068C70DBFCA52C00B992B836AF94340"	56309
-   "South St & 19th St"	"0101000020E61000005DA626C11BCB52C065A54929E8F84340"	55789
+   **"stop_name"	"geom"	"estimated_pop_800m" <br>
+   "Lombard St & 18th St"	"0101000020E610000044A51133FBCA52C01B2FDD2406F94340"	57936 <br>
+   "Rittenhouse Sq & 18th St "	"0101000020E61000003C2F151BF3CA52C07E74EACA67F94340"	57571 <br>
+   "Snyder Av & 9th St "	"0101000020E61000001E1840F850CA52C0BE50C07630F64340"	57412 <br>
+   "19th St & Lombard St "	"0101000020E6100000D68C0C7217CB52C0DBF813950DF94340"	57019<br>
+   "Lombard St & 19th St"	"0101000020E61000004968CBB914CB52C0E2E995B20CF94340"	57019<br>
+   "16th St & Locust St "	"0101000020E6100000B2666490BBCA52C0410E4A9869F94340"	56309<br>
+   "Locust St & 16th St "	"0101000020E6100000E068C70DBFCA52C00B992B836AF94340"	56309<br>
+   "South St & 19th St"	"0101000020E61000005DA626C11BCB52C065A54929E8F84340"	55789<br>**
 
 2.  Which **eight** bus stops have the smallest population above 500 people _inside of Philadelphia_ within 800 meters of the stop (Philadelphia county block groups have a geoid prefix of `42101` -- that's `42` for the state of PA, and `101` for Philadelphia county)?
 
@@ -165,15 +165,15 @@ There are several datasets that are prescribed for you to use in this part. Your
         geog geography -- The geography of the bus stop
     )
     ```
-   "stop_name"	"geom"	"estimated_pop_800m"
-   "Delaware Av & Castor Av"	"0101000020E61000002AE3DF675CC552C07EC4AF58C3FD4340"	593
-   "Delaware Av & Venango St"	"0101000020E6100000E0BDA3C684C552C02EE3A6069AFD4340"	593
-   "Delaware Av & Tioga St"	"0101000020E610000023A30392B0C552C0A0504F1F81FD4340"	593
-   "Northwestern Av & Stenton Av"	"0101000020E61000006021736550CE52C05858703FE00B4440"	655
-   "Bethlehem Pk & Chesney Ln"	"0101000020E6100000B8E9CF7EA4CD52C0151DC9E53F0C4440"	655
-   "Stenton Av & Northwestern Av"	"0101000020E6100000F6ECB94C4DCE52C09D9CA1B8E30B4440"	655
-   "Bethlehem Pk & Chesney Ln"	"0101000020E6100000211E8997A7CD52C094F77134470C4440"	655
-   "Delaware Av & Wheatsheaf Ln"	"0101000020E610000072FBE59315C552C07C0A80F10CFE4340"	684
+   **"stop_name"	"geom"	"estimated_pop_800m" <br>
+   "Delaware Av & Castor Av"	"0101000020E61000002AE3DF675CC552C07EC4AF58C3FD4340"	593 <br>
+   "Delaware Av & Venango St"	"0101000020E6100000E0BDA3C684C552C02EE3A6069AFD4340"	593<br>
+   "Delaware Av & Tioga St"	"0101000020E610000023A30392B0C552C0A0504F1F81FD4340"	593<br>
+   "Northwestern Av & Stenton Av"	"0101000020E61000006021736550CE52C05858703FE00B4440"	655<br>
+   "Bethlehem Pk & Chesney Ln"	"0101000020E6100000B8E9CF7EA4CD52C0151DC9E53F0C4440"	655<br>
+   "Stenton Av & Northwestern Av"	"0101000020E6100000F6ECB94C4DCE52C09D9CA1B8E30B4440"	655<br>
+   "Bethlehem Pk & Chesney Ln"	"0101000020E6100000211E8997A7CD52C094F77134470C4440"	655<br>
+   "Delaware Av & Wheatsheaf Ln"	"0101000020E610000072FBE59315C552C07C0A80F10CFE4340"	684<br>**
 
 3.  Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 
@@ -189,18 +189,18 @@ There are several datasets that are prescribed for you to use in this part. Your
         distance double precision  -- The distance apart in meters
     )
     ```
-   Top 10 distances (Full code has all records): 
-   "address"	"stop_name"	"distance"
-   "130 SPRING LN"	"Ridge Av & Ivins Rd"	1738.80211643
-   "8482 HAGYS MILL RD"	"Ridge Av & Ivins Rd"	1726.23007258
-   "150 SPRING LN"	"Ridge Av & Ivins Rd"	1701.19169205
-   "170 SPRING LN"	"Ridge Av & Ivins Rd"	1695.93097364
-   "100 SPRING LN"	"Ridge Av & Ivins Rd"	1588.3627313
-   "27 RIVER RD"	"Oak Hill Apartments Loop"	1545.73038158
-   "190 SPRING LN"	"Ridge Av & Ivins Rd"	1544.27695646
-   "1 MUSTIN ST"	"Front St & Pattison Av"	1491.01943065
-   "630 SAINT ANDREW RD"	"Germantown Av & Springfield Av "	1452.8834435
-   "700 SAINT ANDREW RD"	"Wissahickon Av & Cathedral Rd - FS"	1451.70751103
+  **Top 10 distances (Full code has all records): <br>
+   "address"	"stop_name"	"distance"<br>
+   "130 SPRING LN"	"Ridge Av & Ivins Rd"	1738.80211643<br>
+   "8482 HAGYS MILL RD"	"Ridge Av & Ivins Rd"	1726.23007258<br>
+   "150 SPRING LN"	"Ridge Av & Ivins Rd"	1701.19169205<br>
+   "170 SPRING LN"	"Ridge Av & Ivins Rd"	1695.93097364<br>
+   "100 SPRING LN"	"Ridge Av & Ivins Rd"	1588.3627313<br>
+   "27 RIVER RD"	"Oak Hill Apartments Loop"	1545.73038158<br>
+   "190 SPRING LN"	"Ridge Av & Ivins Rd"	1544.27695646<br>
+   "1 MUSTIN ST"	"Front St & Pattison Av"	1491.01943065<br>
+   "630 SAINT ANDREW RD"	"Germantown Av & Springfield Av "	1452.8834435<br>
+   "700 SAINT ANDREW RD"	"Wissahickon Av & Cathedral Rd - FS"	1451.70751103<br>**
 
 4.  Using the `bus_shapes`, `bus_routes`, and `bus_trips` tables from GTFS bus feed, find the **two** routes with the longest trips.
 
@@ -223,10 +223,10 @@ There are several datasets that are prescribed for you to use in this part. Your
         shape_length double precision  -- Length of the trip in meters
     )
     ```
-   "route_short_name"	"trip_headsign"
-   "130"	"""Bucks County Community College"""
-   "128"	"""Oxford Valley Mall"""
-   (Geoid/shape in full code)
+   **"route_short_name"	"trip_headsign"<br>
+   "130"	"""Bucks County Community College"""<br>
+   "128"	"""Oxford Valley Mall"""<br>
+   (Geoid/shape in full code)<br>**
 
 5.  Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods.
 
@@ -238,13 +238,13 @@ There are several datasets that are prescribed for you to use in this part. Your
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
-   "neighborhood"	"metric"
-   "Yorktown"	1.000
-   "Airport"	1.000
-   "Allegheny West"	1.000
-   "Andorra"	1.000
-   "Aston-Woodbridge"	1.000
-   Plus quite a few others that also scored 1.00 on the metric. Full records in code. 
+   **"neighborhood"	"metric"<br>
+   "Yorktown"	1.000<br>
+   "Airport"	1.000<br>
+   "Allegheny West"	1.000<br>
+   "Andorra"	1.000<br>
+   "Aston-Woodbridge"	1.000<br>
+   Plus quite a few others that also scored 1.00 on the metric. Full records in code.** 
 
 7.  What are the _bottom five_ neighborhoods according to your accessibility metric?
 
@@ -257,12 +257,12 @@ There are several datasets that are prescribed for you to use in this part. Your
       num_bus_stops_inaccessible integer
     )
     ```
-   "neighborhood"	"metric (% accessible)"
-   "Cedar Park"	0.500
-   "Paschall"	0.457
-   "Southwest Schuylkill"	0.434
-   "Woodland Terrace"	0.200
-   "Bartram Village"	0.000 
+   **"neighborhood"	"metric (% accessible)" <br>
+   "Cedar Park"	0.500<br>
+   "Paschall"	0.457<br><br>
+   "Southwest Schuylkill"	0.434<br>
+   "Woodland Terrace"	0.200<br>
+   "Bartram Village"	0.000** <br>
 
 8.  With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
@@ -275,8 +275,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     **Discussion: I used the the College & University dataset from OpenData Philadelphia to identify the building parcels labeled as school/school-related and owned by UPenn. I used these parcels as a representation of the main campus. With these, I identified the block groups in which they are located. **
     
-   "count_block_groups"
-   22
+   **"count_block_groups"<br>
+   22**
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
@@ -286,8 +286,8 @@ There are several datasets that are prescribed for you to use in this part. Your
         geo_id text
     )
     ```
-   "geoid"
-   "421010369022"
+   **"geoid"<br>
+   "421010369022"**
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. SQL's `CASE` statements may be helpful for some operations.
 
@@ -306,16 +306,16 @@ There are several datasets that are prescribed for you to use in this part. Your
 
    >**Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
    
-I used average communte time by census tract to describe each of the railstops. I used the new ProgressPHL dashboard    to download data on commute times. For this question, I catgorized tracts by average, above average, or below         average. I thought it would be interesting to understand the disparity in commute times around the city and along one trip route. Here's a sample of the output:
+**I used average communte time by census tract to describe each of the railstops. I used the new ProgressPHL dashboard    to download data on commute times. For this question, I catgorized tracts by average, above average, or below         average. I thought it would be interesting to understand the disparity in commute times around the city and along one trip route. Here's a sample of the output:**
    
-   "stop_id"	"stop_name"	"stop_desc"	"stop_lon"	"stop_lat"
-   90003	"Wynnefield Avenue"	"This Census Tract Has Average Commute Time"	-75.2255556	39.99
-   90006	"Jefferson Station"	"This Census Tract Has Above Average Commute Time"	-75.1580556	39.9525
-   90007	"Temple University"	"This Census Tract Has Above Average Commute Time"	-75.1494444	39.9813889
-   90008	"North Broad"	"This Census Tract Has Average Commute Time"	-75.1538889	39.9922222
-   90009	"Wayne Junction"	"This Census Tract Has Average Commute Time"	-75.16	40.0222222
-   90218	"Allegheny"	"This Census Tract Has Below Average Commute Time"	-75.1647222	40.0036111
-   90220	"Wissahickon"	"This Census Tract Has Average Commute Time"	-75.2102778	40.0166667
-   90221	"Manayunk"	"This Census Tract Has Average Commute Time"	-75.225	40.0269444
-   90222	"Ivy Ridge"	"This Census Tract Has Average Commute Time"	-75.2355556	40.0341667
-   90313	"Angora"	"This Census Tract Has Average Commute Time"	-75.2386111	39.9447222
+   **"stop_id"	"stop_name"	"stop_desc"	"stop_lon"	"stop_lat"<br>
+   90003	"Wynnefield Avenue"	"This Census Tract Has Average Commute Time"	-75.2255556	39.99<br>
+   90006	"Jefferson Station"	"This Census Tract Has Above Average Commute Time"	-75.1580556	39.9525<br>
+   90007	"Temple University"	"This Census Tract Has Above Average Commute Time"	-75.1494444	39.9813889<br>
+   90008	"North Broad"	"This Census Tract Has Average Commute Time"	-75.1538889	39.9922222<br>
+   90009	"Wayne Junction"	"This Census Tract Has Average Commute Time"	-75.16	40.0222222<br>
+   90218	"Allegheny"	"This Census Tract Has Below Average Commute Time"	-75.1647222	40.0036111<br>
+   90220	"Wissahickon"	"This Census Tract Has Average Commute Time"	-75.2102778	40.0166667<br>
+   90221	"Manayunk"	"This Census Tract Has Average Commute Time"	-75.225	40.0269444<br>
+   90222	"Ivy Ridge"	"This Census Tract Has Average Commute Time"	-75.2355556	40.0341667<br>
+   90313	"Angora"	"This Census Tract Has Average Commute Time"	-75.2386111	39.9447222**<br>

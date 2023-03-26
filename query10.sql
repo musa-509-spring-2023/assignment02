@@ -16,3 +16,16 @@ You're tasked with giving more contextual information to rail stops to fill the 
 
    >**Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
    */
+
+
+WITH
+
+rail_stop AS (SELECT stop_id, stop_name, stop_lon, stop_lat, ST_setsrid(ST_MakePoint(stop_lon, stop_lat), 4326) AS geog
+FROM septa.rail_stops)
+
+SELECT DISTINCT stop_id, stop_name, stop_lon, stop_lat, COUNT (pc.parcelid) OVER (PARTITION BY stop_id), r.geog
+FROM rail_stop as r
+INNER JOIN phl.pwd_parcels as pc
+ ON st_dwithin(st_setsrid(pc.geog::geography, 4326), st_setsrid(r.geog::geography, 4326), 500)
+
+

@@ -24,8 +24,7 @@ neigh_pop AS (
 SELECT n.name, p.total, n.geog
 FROM azavea.neighborhoods AS n
 INNER JOIN block_pop AS p
-	ON ST_within(ST_Transform(p.geog::geometry, 4236),  ST_Transform(n.geog::geometry, 4236))
-ORDER BY n.name 
+  ON ST_Within(ST_Transform(p.geog::geometry, 4236), ST_Transform(n.geog::geometry, 4236))
 ),
 
 neight_pop_tot AS (
@@ -33,7 +32,6 @@ SELECT name, SUM(total) AS pop
 FROM neigh_pop
 GROUP BY name
 ),
-
 
 -- bus_stop with wheelchair boarding
 
@@ -47,12 +45,12 @@ WHERE wheelchair_boarding = '1'
 
 step1 AS (
 SELECT n.name, ST_Area(n.geog) AS n_area, 
-ST_Area(ST_Intersection(ST_Buffer(st_setsrid(b.geog::geography, 4326), 210), st_setsrid(n.geog::geography, 4326))) AS inter_area,
-ST_Intersection(ST_Buffer(st_setsrid(b.geog::geography, 4326), 210), st_setsrid(n.geog::geography, 4326)) AS inter_geog,
+ST_Area(ST_Intersection(ST_Buffer(b.geog::geography, 210), n.geog::geography)) AS inter_area,
+ST_Intersection(ST_Buffer(b.geog::geography, 210), n.geog::geography) AS inter_geog,
 n.geog AS n_geog
 FROM bus_wheelchair AS b
 INNER JOIN azavea.neighborhoods AS n 
-	ON st_dwithin(st_setsrid(b.geog::geography, 4326), st_setsrid(n.geog::geography, 4326), 210)
+  ON ST_DWithin(b.geog::geography, n.geog::geography, 210)
 ),
 
 -- calculate total accessible area by neighborhood

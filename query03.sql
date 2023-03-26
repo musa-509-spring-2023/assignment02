@@ -15,30 +15,11 @@ Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair
     ```
 */
 
-SELECT septa.bus_stops.geog <-> ST_Transform(phl.pwd_parcels.geog::geometry, 4326) AS dist
-FROM septa.bus_stops, phl.pwd_parcels
-
-
 SELECT parcel.address, bus.stop_name, bus.dist AS distance
 FROM  phl.pwd_parcels AS parcel
 CROSS JOIN LATERAL (
-  SELECT  bus.stop_name, bus.geog <-> parcel.geog AS dist
+  SELECT bus.stop_name, bus.geog <-> st_setsrid(parcel.geog, 4326) AS dist
   FROM septa.bus_stops AS bus
   ORDER BY dist
   LIMIT 1
 ) bus;
-
-
-SELECT subways.gid AS subway_gid,
-       subways.name AS subway,
-       streets.name AS street,
-       streets.gid AS street_gid,
-       streets.geom::geometry(MultiLinestring, 26918) AS street_geom,
-       streets.dist
-FROM nyc_subway_stations subways
-CROSS JOIN LATERAL (
-  SELECT streets.name, streets.geom, streets.gid, streets.geom <-> subways.geom AS dist
-  FROM nyc_streets AS streets
-  ORDER BY dist
-  LIMIT 1
-) streets;

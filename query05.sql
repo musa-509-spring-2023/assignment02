@@ -41,7 +41,7 @@ all_stops AS (
         yes_stop.neighborhood AS neighborhood,
         yes_stop.is_accessible AS num_accessible_stops,
         no_stop.not_accessible AS num_inaccessible_stops,
-        yes_stop.is_accessible - no_stop.not_accessible AS metric
+        yes_stop.is_accessible - no_stop.not_accessible AS accessibility_metric
     FROM stops_nhood_yes AS yes_stop
     INNER JOIN stops_nhood_no AS no_stop ON no_stop.neighborhood = yes_stop.neighborhood
     GROUP BY yes_stop.neighborhood, yes_stop.is_accessible, no_stop.not_accessible
@@ -50,8 +50,8 @@ all_stops AS (
 
 SELECT
     neighborhood,
-    metric,
+    accessibility_metric,
     num_accessible_stops,
     num_inaccessible_stops
 FROM all_stops
-ORDER BY metric DESC
+ORDER BY accessibility_metric DESC

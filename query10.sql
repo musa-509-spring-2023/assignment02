@@ -18,14 +18,10 @@ You're tasked with giving more contextual information to rail stops to fill the 
    */
 
 
-WITH
-
-rail_stop AS (SELECT stop_id, stop_name, stop_lon, stop_lat, ST_setsrid(ST_MakePoint(stop_lon, stop_lat), 4326) AS geog
-FROM septa.rail_stops)
-
-SELECT DISTINCT stop_id, stop_name, stop_lon, stop_lat, COUNT (pc.parcelid) OVER (PARTITION BY stop_id), r.geog
-FROM rail_stop as r
+SELECT DISTINCT stop_id, stop_name, 
+ 'There are ''' || COUNT (pc.parcelid) OVER (PARTITION BY stop_id) || ' parcels'' within ''500 meters'' of the station and average distance between the station and ''' || COUNT (pc.parcelid) OVER (PARTITION BY stop_id) || ' parcels'' is ''' || round(AVG(pc.geog <-> r.geog) OVER (PARTITION BY stop_id)) || 'm''' AS stop_desc,
+stop_lon, stop_lat
+FROM septa.rail_stops as r
 INNER JOIN phl.pwd_parcels as pc
- ON st_dwithin(st_setsrid(pc.geog::geography, 4326), st_setsrid(r.geog::geography, 4326), 500)
-
+    ON ST_DWithin(pc.geog::geography, r.geog::geography, 500);
 

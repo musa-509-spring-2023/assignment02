@@ -27,6 +27,5 @@ Structure:
     order by min_distance
     limit 1
   ) closest_stops
-  ORDER BY distance DESC;
-
+  ORDER BY distance desc;
 

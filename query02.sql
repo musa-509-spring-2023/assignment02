@@ -10,10 +10,10 @@ with
 -- block groups in Philly
 philly_blockgroups as (
     select
-        geoid,
-        geog,
-        statefp,
-        countyfp
+        bg.geoid,
+        bg.geog,
+        bg.statefp,
+        bg.countyfp
     from census.blockgroups_2020 as bg
     where
         bg.statefp::int = 042 and bg.countyfp::int = 101
@@ -52,5 +52,5 @@ select
     philly_pop.geog as geog
 from philly_pop
 where philly_pop.total_pop > 500
-order by philly_pop.total_pop
+order by philly_pop.total_pop desc
 limit 8;

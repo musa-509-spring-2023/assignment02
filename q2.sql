@@ -16,8 +16,8 @@ septa_bus_stop_surrounding_population as (
         sum(pop.total) as estimated_pop_800m
     from septa_bus_stop_blockgroups as stops
     inner join census.population_2020 as pop using (geoid)
-    where pop.total > 500
     group by stops.stop_id
+	having sum(pop.total) >500
 )
 
 select

@@ -48,24 +48,24 @@ closest_accessible_stops as (
 ),
 
 rail_stop_neighbors as (
-    SELECT 
-          rail.stop_id as rail_stop_id,
-          rail.stop_name as rail_stop_name,
-          rail.geog,
-          rail.stop_lon,
-          rail.stop_lat,
-          min_distance
+    select 
+        rail.stop_id as rail_stop_id,
+        rail.stop_name as rail_stop_name,
+        rail.geog,
+        rail.stop_lon,
+        rail.stop_lat,
+        min_distance
     from rail
     cross join lateral closest_accessible_stops
-    ORDER BY min_distance DESC
+    order by min_distance dec
 )
 
 select
-rail_stop_id::INTEGER as stop_id,
+rail_stop_id::integer as stop_id,
 rail_stop_name::text as stop_name,
 round(min_distance) || ' meters to nearest wheelchair-accessible bus stop'::text as stop_desc,
-stop_lon::DOUBLE PRECISION,
-stop_lat::DOUBLE PRECISION
+stop_lon::double precision,
+stop_lat::double precision
 from rail_stop_neighbors
 order by stop_name
 limit 10;

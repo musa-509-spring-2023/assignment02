@@ -63,7 +63,7 @@ shape_trips_combo as (
     inner join septa.bus_trips
         on trip_lengths.shape_id = bus_trips.shape_id
     group by trip_lengths.shape_id, trip_lengths.shape_geog, trip_lengths.line_distance, bus_trips.shape_id, bus_trips.route_id, bus_trips.trip_headsign
-    order by line_distance desc
+    order by trip_lengths.line_distance desc
 ),
 
 routes_combo as (

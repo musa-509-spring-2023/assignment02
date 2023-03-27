@@ -41,7 +41,7 @@ philly_pop as (
     from philly_blockgroups_within_800m as p
     left join census.population_2020 as c
         on p.geoid = c.geoid
-    group by stop_name, geog
+    group by p.stop_name, p.geog
     order by total_pop desc
 )
 

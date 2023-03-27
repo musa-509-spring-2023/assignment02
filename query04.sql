@@ -44,7 +44,7 @@ with trip_lengths as (
     select
         shape_id,
         shape_geom as shape_geog,
-        st_length(shape_geom) as line_distance
+        st_length(shape_geom)::DOUBLE PRECISION as line_distance
     from septa.shape_geogs
     group by shape_id, shape_geom
     order by line_distance desc
@@ -80,9 +80,9 @@ routes_combo as (
 )
 
 select
-    route_short_name::text,
-    trip_headsign::text,
-    shape_geog::geography,
-    line_distance::double precision as shape_length
+    route_short_name::TEXT,
+    trip_headsign::TEXT,
+    shape_geog::GEOGRAPHY,
+    line_distance::DOUBLE PRECISION as shape_length
 from routes_combo
 order by shape_length desc;

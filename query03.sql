@@ -16,12 +16,16 @@ Structure:
 
  --  EXPLAIN
   SELECT 
-  p.address::text as address,
+  p.address::text as parcel_address,
+  p.geog as parcel_geog,
   closest_stops.stop_name::text,
+  closest_stops.stop_geog as stop_geog,
   closest_stops.min_distance::DOUBLE PRECISION as distance
   from phl.pwd_parcels as p
   cross join lateral(
-    select s.stop_name::text,
+    select 
+    s.stop_name::text,
+    s.geog as stop_geog,
     s.geog <-> st_setsrid(p.geog::geography, 4326)::geography as min_distance
     from septa.bus_stops as s
     order by min_distance

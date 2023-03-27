@@ -52,5 +52,5 @@ select
     philly_pop.geog as geog
 from philly_pop
 where philly_pop.total_pop > 500
-order by philly_pop.total_pop desc
+order by philly_pop.total_pop
 limit 8;

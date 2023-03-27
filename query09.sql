@@ -8,5 +8,7 @@ meyerson as (
 
 select bg.geoid as geoid
 from census.blockgroups_2020 as bg, meyerson
-where ST_WITHIN(meyerson.geog::geometry,
-    ST_SETSRID(bg.geog::geometry, 4326))
+where ST_WITHIN(
+    meyerson.geog::geometry,
+    ST_SETSRID(bg.geog::geometry, 4326)
+)

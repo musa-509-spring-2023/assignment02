@@ -15,8 +15,9 @@ septa_bus_stop_blockgroups as (
         '1500000US' || bg.geoid as geoid
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
-        on st_dwithin(st_setsrid(stops.geog::geography, 4326),
-            st_setsrid(bg.geog::geography, 4326), 800)
+        on
+            st_dwithin(st_setsrid(stops.geog::geography, 4326),
+                st_setsrid(bg.geog::geography, 4326), 800)
     where bg.geoid like '42101%'
 ),
 

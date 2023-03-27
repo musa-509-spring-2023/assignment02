@@ -40,19 +40,20 @@ septa_bus_stop_neighborhoods as (
         nh.shape_area as area
     from nearest_wc as stops
     inner join azavea.neighborhoods as nh
-        on st_within(st_setsrid(stops.stop_geog::geometry, 4326),
-            st_setsrid(nh.geog::geometry, 4326))
+        on
+            st_within(st_setsrid(stops.stop_geog::geometry, 4326),
+                st_setsrid(nh.geog::geometry, 4326))
 ),
 
 wc_metrics as (
     select
+        neighborhood,
         count(case when wheelchair_boarding = 1 then 1 end) as count_wc,
         count(stop_name) as total_stops,
         count(case when wheelchair_boarding = 1 then 1 end)::float
         / count(stop_name)::float * 100 as pct,
         avg(distance) as avg_distance_from_wc,
-        count(stop_name) / area * 10000000 as stop_density,
-        neighborhood
+        count(stop_name) / area * 10000000 as stop_density
     from septa_bus_stop_neighborhoods
     group by neighborhood, area
     order by stop_density desc
@@ -61,7 +62,8 @@ wc_metrics as (
 wc_metric as (
     select
         *,
-        case when pct = 0 then 1
+        case
+            when pct = 0 then 1
             when pct < 50 then 2
             when pct >= 50 and pct < 75 then 3
             when pct >= 75 and pct < 100 then 4
@@ -69,11 +71,14 @@ wc_metric as (
         end as pct_score,
         case
             when avg_distance_from_wc > 150 then 1
-            when avg_distance_from_wc > 100
+            when
+                avg_distance_from_wc > 100
                 and avg_distance_from_wc <= 150 then 2
-            when avg_distance_from_wc > 50
+            when
+                avg_distance_from_wc > 50
                 and avg_distance_from_wc <= 100 then 3
-            when avg_distance_from_wc > 0
+            when
+                avg_distance_from_wc > 0
                 and avg_distance_from_wc <= 50 then 4
             when avg_distance_from_wc = 0 then 5
         end as dist_score,

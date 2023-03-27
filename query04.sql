@@ -10,7 +10,8 @@ bus_shape_geog as (
         st_makeline(
     array_agg(
                 st_setsrid(
-                st_makepoint(shapes.shape_pt_lon, shapes.shape_pt_lat), 4326)
+            st_makepoint(shapes.shape_pt_lon, shapes.shape_pt_lat), 4326
+                )
                 order by shapes.shape_pt_sequence
             )
         )::geography as shape_geog

@@ -7,8 +7,13 @@ with
 bus_shape_geog as (
     select
         shapes.shape_id,
-        st_makeline(array_agg(st_setsrid(st_makepoint(shapes.shape_pt_lon, shapes.shape_pt_lat), 4326)
-            order by shapes.shape_pt_sequence))::geography as shape_geog
+        st_makeline(
+            array_agg(
+                st_setsrid(
+                    st_makepoint(shapes.shape_pt_lon, shapes.shape_pt_lat), 4326)
+                order by shapes.shape_pt_sequence
+                )
+            )::geography as shape_geog
     from septa.bus_shapes as shapes
     group by shapes.shape_id
 ),

@@ -5,7 +5,7 @@
 */
 
 WITH septa_stops AS (
-	SELECT 
+	SELECT
 		stops.stop_name,	
 		ST_MAKEPOINT(stop_lon, stop_lat)::geography AS geog
 	FROM septa.bus_stops AS stops
@@ -19,8 +19,8 @@ CROSS JOIN LATERAL (
   SELECT 
 		parcels."ADDRESS" AS address,
 		bus_stops.stop_name,
-		parcels.geometry <-> bus_stops.geog AS dist
+		parcels.geometry <-> bus_stops.geog AS distance
   FROM phl.pwd_parcels AS parcels
-  ORDER BY dist DESC
-	LIMIT 2
+  ORDER BY distance DESC
+	LIMIT 5
 ) parcels

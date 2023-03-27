@@ -32,7 +32,8 @@ stops_nhood_no AS (
             WHEN stops.wheelchair_boarding = 0 THEN COUNT(stops.wheelchair_boarding)
             ELSE 0 END AS not_accessible
     FROM stops
-    INNER JOIN nhood ON ST_INTERSECTS(stops.geog, nhood.geog)
+    RIGHT JOIN nhood ON ST_INTERSECTS(stops.geog, nhood.geog)
+-- 	WHERE stops.wheelchair_boarding != 1 OR stops.wheelchair_boarding IS NULL
     GROUP BY nhood.neighborhood, stops.wheelchair_boarding
 ),
 
@@ -46,7 +47,6 @@ all_stops AS (
     INNER JOIN stops_nhood_no AS no_stop ON no_stop.neighborhood = yes_stop.neighborhood
     GROUP BY yes_stop.neighborhood, yes_stop.is_accessible, no_stop.not_accessible
 )
-
 
 SELECT
     neighborhood,

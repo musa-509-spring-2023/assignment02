@@ -227,7 +227,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     ```
 
     **Discussion:**
-    I used the Open Data Philly Universities and Colleges dataset. I fitlered for University of Pennsylvania, and then I narrowed properties down to those within .015 degrees of Meyerson Hall (because that drew a bounding box of Penn properties that best resembled my conception of campus). I could probably get a more accurate outline with something other than an envelope...
+    I used the Open Data Philly Universities and Colleges dataset. I fitlered for University of Pennsylvania, and then I narrowed properties down to those within .012 degrees of Meyerson Hall (because that drew a bounding box of Penn properties that best resembled my conception of campus). I used a concave hull to get a tailored boundary of the remaining properties.
 
     https://www.opendataphilly.org/dataset/philadelphia-universities-and-colleges/resource/1e37f5f0-6212-4cb4-9d87-261b58ae01c4
 

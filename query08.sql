@@ -16,4 +16,4 @@ from census.blockgroups_2020 as bg, penn_collect
 where ST_WITHIN(
     ST_SETSRID(bg.geog::geometry, 4326),
     ST_SETSRID(penn_collect.outline::geometry, 4326)
-    )
+)

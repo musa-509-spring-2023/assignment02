@@ -13,8 +13,10 @@ septa_bus_stop_blockgroups as (
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
         on
-            st_dwithin(st_setsrid(stops.geog::geography, 4326),
-                st_setsrid(bg.geog::geography, 4326), 800)
+            st_dwithin(
+                st_setsrid(stops.geog::geography, 4326),
+                st_setsrid(bg.geog::geography, 4326), 800
+            )
 ),
 
 septa_bus_stop_surrounding_population as (

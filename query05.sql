@@ -41,8 +41,10 @@ septa_bus_stop_neighborhoods as (
     from nearest_wc as stops
     inner join azavea.neighborhoods as nh
         on
-            st_within(st_setsrid(stops.stop_geog::geometry, 4326),
-                st_setsrid(nh.geog::geometry, 4326))
+            st_within(
+                st_setsrid(stops.stop_geog::geometry, 4326),
+                st_setsrid(nh.geog::geometry, 4326)
+            )
 ),
 
 wc_metrics as (

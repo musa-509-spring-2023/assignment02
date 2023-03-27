@@ -41,8 +41,10 @@ septa_bus_stop_neighborhoods as (
     from nearest_wc as stops
     inner join azavea.neighborhoods as nh
         on
-            st_within(st_setsrid(stops.stop_geog::geometry, 4326),
-                st_setsrid(nh.geog::geometry, 4326))
+            st_within(
+                st_setsrid(stops.stop_geog::geometry, 4326),
+                st_setsrid(nh.geog::geometry, 4326)
+            )
 ),
 
 wc_metrics as (
@@ -62,7 +64,8 @@ wc_metrics as (
 wc_metric as (
     select
         *,
-        case when pct = 0 then 1
+        case
+            when pct = 0 then 1
             when pct < 50 then 2
             when pct >= 50 and pct < 75 then 3
             when pct >= 75 and pct < 100 then 4
@@ -91,7 +94,7 @@ wc_metric as (
     from wc_metrics
 )
 
-select
+select -- noqa: L034
     neighborhood as neighborhood_name,
     (pct_score + dist_score + density_score::float) / 3 as accessibility_metric,
     count_wc as num_bus_stops_accessible,

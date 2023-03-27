@@ -25,7 +25,7 @@ all_data as (
     order by distance desc
 )
 
-select
+select -- noqa: L034
     stop_id,
     stop_name,
     'The PWD parcel nearest to this stop is owned by '

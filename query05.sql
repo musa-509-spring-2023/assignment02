@@ -94,7 +94,7 @@ wc_metric as (
     from wc_metrics
 )
 
-select
+select -- noqa: ST06
     neighborhood as neighborhood_name,
     (pct_score + dist_score + density_score::float) / 3 as accessibility_metric,
     count_wc as num_bus_stops_accessible,

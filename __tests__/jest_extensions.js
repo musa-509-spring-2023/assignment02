@@ -56,7 +56,7 @@ async function toReturnRecords(queryFN, resultsFNs, options = {}) {
 
   // Get the database connection configuration.
   const user     = process.env['POSTGRES_USER'] || 'postgres';
-  const password = process.env['POSTGRES_PASS'] || 'postgres';
+  const password = process.env['POSTGRES_PASS'] || 'yishengao';
   const host     = process.env['POSTGRES_HOST'] || 'localhost';
   const port     = process.env['POSTGRES_PORT'] || '5432';
   const database = process.env['POSTGRES_NAME'] || 'musa_509';

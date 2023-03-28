@@ -13,7 +13,7 @@ SELECT DISTINCT
     length.shape_geog,
     length.shape_length
 FROM length
-JOIN septa.bus_trips AS trips ON length.shape_id = trips.shape_id
-JOIN septa.bus_routes AS routes ON routes.route_id = trips.route_id
-ORDER BY shape_length DESC
+INNER JOIN septa.bus_trips AS trips ON length.shape_id = trips.shape_id
+INNER JOIN septa.bus_routes AS routes ON routes.route_id = trips.route_id
+ORDER BY length.shape_length DESC
 LIMIT 2

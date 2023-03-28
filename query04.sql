@@ -64,7 +64,11 @@ last_result AS (
 )
 
 -- select the two routes with the longest trips
-SELECT DISTINCT *
+SELECT DISTINCT
+    last_result.route_short_name,
+    last_result.trip_headsign,
+    last_result.shape_length,
+    last_result.shape_geog
 FROM last_result
-ORDER BY shape_length DESC
+ORDER BY last_result.shape_length DESC
 LIMIT 2;

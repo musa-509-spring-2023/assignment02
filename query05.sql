@@ -76,17 +76,21 @@ step2 AS (
 ),
 -- join pop data
 step3 AS (
-    SELECT *
+    SELECT
+        step2.name,
+        step2.access_area,
+        neight_pop_tot.pop
     FROM step2
     INNER JOIN neight_pop_tot USING (name)
 )
 -- calculate accessibility_metric
 SELECT DISTINCT
-    name AS neighborhood_name,
-    a.access_area / b.n_area * a.pop AS accessibility_metric,
-    b.n_geog
-FROM step3 AS a
-INNER JOIN step1 AS b USING (name)
+    step3.name AS neighborhood_name,
+    step3.access_area / step1.n_area * step3.pop AS accessibility_metric,
+    step1.n_geog
+FROM step3
+INNER JOIN step1 USING (name)
 ORDER BY accessibility_metric DESC
 LIMIT 5;
+
 

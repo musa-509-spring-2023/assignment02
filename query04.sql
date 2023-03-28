@@ -23,9 +23,9 @@ WITH
 bus_shape_geog AS (
     SELECT
         shape_id,
-        ST_MakeLine(
+        ST_MAKELIN(
             ARRAY_AGG(
-                ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat), 4326)
+                ST_SETSRID(ST_MAKEPOINT(shape_pt_lon, shape_pt_lat), 4326)
                 ORDER BY shape_pt_sequence
             )
         )::geography AS shape_geog
@@ -37,7 +37,7 @@ bus_shape_geog AS (
 bus_shape_geog_length AS (
     SELECT
         *,
-        ST_Length(shape_geog) AS shape_length
+        ST_LENGTH(shape_geog) AS shape_length
     FROM bus_shape_geog
 ),
 

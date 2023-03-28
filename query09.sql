@@ -4,4 +4,4 @@ WITH pwd_parcels AS (
 )
 
 SELECT bg.geoid FROM census.blockgroups_2020 AS bg
-JOIN pwd_parcels AS pwd ON ST_INTERSECTS(ST_TRANSFORM(bg.geog::geometry, 4326), ST_TRANSFORM(pwd.geog::geometry, 4326))
+INNER JOIN pwd_parcels AS pwd ON ST_INTERSECTS(ST_TRANSFORM(bg.geog::geometry, 4326), ST_TRANSFORM(pwd.geog::geometry, 4326))

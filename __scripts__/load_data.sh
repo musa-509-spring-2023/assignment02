@@ -26,12 +26,12 @@ PGPASSWORD=postgres createdb \
   -h localhost \
   -p 5432 \
   -U postgres \
-  musa_509
+  HW2
 PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -f "${SCRIPTDIR}/create_tables.sql"
 
 # Load trip gtfs data into database
@@ -39,21 +39,21 @@ PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -c "\copy septa.bus_stops FROM '${DATADIR}/google_bus/stops.txt' DELIMITER ',' CSV HEADER;"
 
 PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -c "\copy septa.bus_routes FROM '${DATADIR}/google_bus/routes.txt' DELIMITER ',' CSV HEADER;"
 
 PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -c "\copy septa.bus_trips FROM '${DATADIR}/google_bus/trips.txt' DELIMITER ',' CSV HEADER;"
 
 
@@ -61,14 +61,14 @@ PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -c "\copy septa.bus_shapes FROM '${DATADIR}/google_bus/shapes.txt' DELIMITER ',' CSV HEADER;"
 
 PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -c "\copy septa.rail_stops FROM '${DATADIR}/google_rail/stops.txt' DELIMITER ',' CSV HEADER;"
 
 
@@ -105,7 +105,7 @@ PGPASSWORD=postgres psql \
   -h localhost \
   -p 5432 \
   -U postgres \
-  -d musa_509 \
+  -d HW2 \
   -c "\copy census.population_2020. FROM '${DATADIR}/census_population_2020.csv' DELIMITER ',' CSV HEADER;"
 
 

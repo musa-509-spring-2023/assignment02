@@ -59,7 +59,7 @@ async function toReturnRecords(queryFN, resultsFNs, options = {}) {
   const password = process.env['POSTGRES_PASS'] || 'postgres';
   const host     = process.env['POSTGRES_HOST'] || 'localhost';
   const port     = process.env['POSTGRES_PORT'] || '5432';
-  const database = process.env['POSTGRES_NAME'] || 'musa_509';
+  const database = process.env['POSTGRES_NAME'] || 'HW2'; //'musa_509'
 
   // Run the query code.
   const client = new pg.Client({ user, password, host, port, database });

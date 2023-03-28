@@ -23,7 +23,7 @@ I designated this buffer zone as the "transit accessible zone for wheelchairs" a
 */
 
 WITH
-  -- calculate neighborhood pop
+-- calculate neighborhood pop
 block_pop AS (
     SELECT
         geoid,
@@ -32,6 +32,7 @@ block_pop AS (
     FROM census.blockgroups_2020 AS a
     INNER JOIN census.population_2020 AS b USING (geoid)
 ),
+
 neigh_pop AS (
     SELECT
         n.name,
@@ -41,6 +42,7 @@ neigh_pop AS (
     INNER JOIN block_pop AS p
         ON ST_WITHIN(ST_TRANSFORM(p.geog::geometry, 4236), ST_TRANSFORM(n.geog::geometry, 4236))
 ),
+
 neight_pop_tot AS (
     SELECT
         name,
@@ -48,12 +50,14 @@ neight_pop_tot AS (
     FROM neigh_pop
     GROUP BY name
 ),
+
 -- bus_stop with wheelchair boarding
 bus_wheelchair AS (
     SELECT *
     FROM septa.bus_stops
     WHERE wheelchair_boarding = '1'
 ),
+
 -- generate intersections of 210m buffer with each neighborhood
 step1 AS (
     SELECT
@@ -66,6 +70,7 @@ step1 AS (
     INNER JOIN azavea.neighborhoods AS n
         ON ST_DWITHIN(b.geog::geography, n.geog::geography, 210)
 ),
+
 -- calculate total accessible area by neighborhood
 step2 AS (
     SELECT
@@ -74,6 +79,7 @@ step2 AS (
     FROM step1
     GROUP BY name
 ),
+
 -- join pop data
 step3 AS (
     SELECT
@@ -83,6 +89,7 @@ step3 AS (
     FROM step2
     INNER JOIN neight_pop_tot USING (name)
 )
+
 -- calculate accessibility_metric
 SELECT DISTINCT
     step3.name AS neighborhood_name,

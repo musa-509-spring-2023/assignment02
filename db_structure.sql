@@ -192,10 +192,4 @@ CREATE INDEX IF NOT EXISTS pwd_parcels_geog_idx ON phl.pwd_parcels USING GIST (g
 -------------------------------------------------------------------------------
 ---------------change srid!!!----------------------------------------
 
-ALTER TABLE phl.pwd_parcels ADD COLUMN geog_4326 geography;
-UPDATE phl.pwd_parcels
-SET geog_4326 = ST_Transform(geog::geometry, 4326)::geography;
-ALTER TABLE phl.pwd_parcels DROP COLUMN geog;
-ALTER TABLE phl.pwd_parcels RENAME COLUMN geog_4326 TO geog;
 
--------------------------------------------------------------------------------

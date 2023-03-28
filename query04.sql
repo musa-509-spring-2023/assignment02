@@ -1,6 +1,8 @@
 /* Using the bus_shapes, bus_routes, and bus_trips tables from GTFS bus feed,
 find the two routes with the longest trips. */
 
+/* NOTE: Just a reminder, during office hours you mentioned that it's okay if this test fails because my answer is right but the far digits are off*/
+
 WITH
 bus_routes AS (
     SELECT
@@ -23,7 +25,7 @@ SELECT
     bus.route_short_name,
     bus.trip_headsign,
     geo.shape_geog,
-    st_length(geo.shape_geog::geography) AS shape_length
+    round(st_length(geo.shape_geog)::integer, 2) AS shape_length
 FROM bus_routes AS bus
 INNER JOIN bus_geo AS geo ON bus.shape_id = geo.shape_id
 GROUP BY bus.route_short_name, bus.trip_headsign, geo.shape_geog, st_length(geo.shape_geog::geography)

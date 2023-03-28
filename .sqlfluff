@@ -2,7 +2,7 @@
 dialect = postgres
 exclude_rules = L016,L031,L032,L059
 
-[sqlfluff:rules]
+[sqlfluff:indentation]
 tab_space_size = 4
 
 [sqlfluff:rules:L010]

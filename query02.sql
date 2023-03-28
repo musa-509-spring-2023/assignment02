@@ -18,7 +18,7 @@ septa_bus_stop_blockgroups AS (
         bg.geoid
     FROM septa.bus_stops AS stops
     INNER JOIN philly_blockgroups AS bg
-        ON ST_DWithin(ST_SetSRID(stops.geog::geography, 4326), ST_SetSRID(bg.geog::geography, 4326), 800)
+        ON ST_DWITHIN(ST_SETSRID(stops.geog::geography, 4326), ST_SETSRID(bg.geog::geography, 4326), 800)
 ),
 
 septa_bus_stop_surrounding_population AS (
@@ -41,4 +41,6 @@ INNER JOIN septa.bus_stops AS stops
 WHERE pop.estimated_pop_800m > 500
 ORDER BY pop.estimated_pop_800m
 LIMIT 8;
+
+
 

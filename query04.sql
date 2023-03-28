@@ -25,7 +25,7 @@ SELECT
     bus.route_short_name,
     bus.trip_headsign,
     geo.shape_geog,
-    round(st_length(geo.shape_geog)::integer, 2) AS shape_length
+    st_length(geo.shape_geog::geography) AS shape_length
 FROM bus_routes AS bus
 INNER JOIN bus_geo AS geo ON bus.shape_id = geo.shape_id
 GROUP BY bus.route_short_name, bus.trip_headsign, geo.shape_geog, st_length(geo.shape_geog::geography)

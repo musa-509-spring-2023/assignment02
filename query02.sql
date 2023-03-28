@@ -5,8 +5,7 @@ septa_bus_stop_blockgroups as (
         stops.stop_id,
         '1500000US' || bg.geoid as geoid
     from septa.bus_stops as stops
-    inner join census.blockgroups_2020 as bg
-       on st_dwithin(st_setsrid(stops.geog::geography,4326), st_setsrid(bg.geog::geography,4326), 800)
+    inner join census.blockgroups_2020 as bg on st_dwithin(st_setsrid(stops.geog::geography, 4326), st_setsrid(bg.geog::geography, 4326), 800)
 ),
 
 septa_bus_stop_surrounding_population as (
@@ -25,6 +24,6 @@ select
 from septa_bus_stop_surrounding_population as pop
 
 inner join septa.bus_stops as stops using (stop_id)
-where pop.estimated_pop_800m >500
+where pop.estimated_pop_800m > 500
 order by pop.estimated_pop_800m asc
 limit 8

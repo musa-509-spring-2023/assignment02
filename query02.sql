@@ -41,6 +41,3 @@ INNER JOIN septa.bus_stops AS stops
 WHERE pop.estimated_pop_800m > 500
 ORDER BY pop.estimated_pop_800m
 LIMIT 8;
-
-
-

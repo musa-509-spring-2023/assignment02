@@ -11,15 +11,11 @@
 
 */
 
-WITH
-
-univ_boundary AS (
-SELECT * FROM azavea.neighborhoods
-WHERE name = 'UNIVERSITY_CITY'
+WITH univ_boundary AS (
+    SELECT * FROM azavea.neighborhoods
+    WHERE name = 'UNIVERSITY_CITY'
 )
-
 SELECT COUNT(a.geog)::integer AS count_block_groups
-FROM census.blockgroups_2020 as a
-INNER JOIN univ_boundary as b
-	ON ST_within(ST_Transform(a.geog::geometry, 4236),  ST_Transform(b.geog::geometry, 4236))
-
+FROM census.blockgroups_2020 AS a
+INNER JOIN univ_boundary AS b
+    ON ST_WITHIN(ST_TRANSFORM(a.geog::geometry, 4236),  ST_TRANSFORM(b.geog::geometry, 4236));

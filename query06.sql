@@ -89,6 +89,3 @@ FROM step3
 INNER JOIN step1 USING (name)
 ORDER BY accessibility_metric DESC
 LIMIT 5;
-
-
-

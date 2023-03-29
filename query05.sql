@@ -62,10 +62,10 @@ bus_wheelchair AS (
 step1 AS (
     SELECT
         n.name,
+        n.geog AS n_geog,
         ST_AREA(n.geog) AS n_area,
-        ST_AREA(ST_INTERSECTION(ST_BUFFER(b.geog::geography, 210), n.geog::geography)) AS inter_area,
         ST_INTERSECTION(ST_BUFFER(b.geog::geography, 210), n.geog::geography) AS inter_geog,
-        n.geog AS n_geog
+        ST_AREA(ST_INTERSECTION(ST_BUFFER(b.geog::geography, 210), n.geog::geography)) AS inter_area
     FROM bus_wheelchair AS b
     INNER JOIN azavea.neighborhoods AS n
         ON ST_DWITHIN(b.geog::geography, n.geog::geography, 210)
@@ -92,9 +92,9 @@ step3 AS (
 
 -- calculate accessibility_metric
 SELECT DISTINCT
+    step1.n_geog,
     step3.name AS neighborhood_name,
-    step3.access_area / step1.n_area * step3.pop AS accessibility_metric,
-    step1.n_geog
+    step3.access_area / step1.n_area * step3.pop AS accessibility_metric
 FROM step3
 INNER JOIN step1 USING (name)
 ORDER BY accessibility_metric DESC

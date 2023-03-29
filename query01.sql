@@ -8,27 +8,36 @@ with
 
 septa_bus_stop_blockgroups as (
     select
-        stops.stop_id,
-        '1500000US' || bg.geoid as geoid
-    from septa.bus_stops as stops
-    inner join census.blockgroups_2020 as bg
-        on st_dwithin(stops.geog, bg.geog, 800)
+        septa.bus_stops.stop_id,
+        '1500000US' || census.blockgroups_2020.geoid as geoid
+    from septa.bus_stops
+    inner join census.blockgroups_2020
+        on
+            st_dwithin(
+                st_setsrid(septa.bus_stops.geog, 4326),
+                st_setsrid(census.blockgroups_2020.geog, 4326),
+                800
+            )
 ),
 
 septa_bus_stop_surrounding_population as (
     select
-        stops.stop_id,
-        sum(pop.total) as estimated_pop_800m
-    from septa_bus_stop_blockgroups as stops
-    inner join census.population_2020 as pop using (geoid)
-    group by stops.stop_id
+        septa_bus_stop_blockgroups.stop_id,
+        sum(census.population_2020.total) as estimated_pop_800m
+    from septa_bus_stop_blockgroups
+    inner join
+        census.population_2020 on
+            septa_bus_stop_blockgroups.geoid = population_2020.geoid
+group by septa_bus_stop_blockgroups.stop_id -- noqa: L003
 )
 
 select
-    stops.stop_name,
-    pop.estimated_pop_800m,
-    stops.geog
-from septa_bus_stop_surrounding_population as pop
-inner join septa.bus_stops as stops using (stop_id)
-order by pop.estimated_pop_800m desc
+    septa.bus_stops.stop_name,
+    septa_bus_stop_surrounding_population.estimated_pop_800m,
+    septa.bus_stops.geog
+from septa_bus_stop_surrounding_population
+inner join
+    septa.bus_stops on
+        septa_bus_stop_surrounding_population.stop_id = bus_stops.stop_id
+order by septa_bus_stop_surrounding_population.estimated_pop_800m desc
 limit 8

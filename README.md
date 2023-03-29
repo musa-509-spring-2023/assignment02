@@ -199,7 +199,9 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Discussion:** I define the accessibility metric by the density of accessible stops in a neighborhood. Since all neighborhoods in Philadelphia have different areas, it would be unjust to say that a small neighborhood with only a few stops an inaccessible neigborhood or a huge neighborhood with many an accessible one. 
+
+    I first merged azavea.neighborhood with step.bus_stops dataset to find out how many accessible stops there are in each neighborhood. Then I used st_area function on the azavea.neighborhoods dataset to find the area of the neighborhoods. Then I divide the number of accessible stops by the area to calculate the accessibiliy metric. 
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
@@ -224,7 +226,8 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    **Discussion:** I used the pwd.parcel dataset and filtered the land owned by the University of Pennsylvania using WHERE function. There are only few parcels, but all fall in or at the borders of the main campus region. Then I applied st_convexhull to these parcels. I used an inner join to find where the convexhull result intersects with census.blockgroups_2020 and counted the final result.
+
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
@@ -237,7 +240,7 @@ There are several datasets that are prescribed for you to use in this part. Your
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. SQL's `CASE` statements may be helpful for some operations.
 
-    **Structure:**
+    **Structure:**Schemas
     ```sql
     (
         stop_id integer,

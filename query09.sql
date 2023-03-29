@@ -9,7 +9,7 @@ With a query involving PWD parcels and census block groups, find the `geo_id` of
     ```
 */
 
-WITH 
+WITH
 -- Meyerson Parcels
 meyerson AS (
     SELECT * FROM phl.pwd_parcels

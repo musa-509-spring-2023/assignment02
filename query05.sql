@@ -60,7 +60,8 @@ bus_wheelchair AS (
 
 -- generate intersections of 210m buffer with each neighborhood
 step1 AS (
-    SELECT n.name,
+    SELECT
+        n.name,
         ST_AREA(n.geog) AS n_area,
         ST_AREA(ST_INTERSECTION(ST_BUFFER(b.geog::geography, 210), n.geog::geography)) AS inter_area,
         ST_INTERSECTION(ST_BUFFER(b.geog::geography, 210), n.geog::geography) AS inter_geog,
@@ -90,9 +91,10 @@ step3 AS (
 )
 
 -- calculate accessibility_metric
-SELECT step3.name AS neighborhood_name,
-    step1.n_geog,
-    step3.access_area / step1.n_area * step3.pop AS accessibility_metric
+SELECT DISTINCT
+    step3.name AS neighborhood_name,
+    step3.access_area / step1.n_area * step3.pop AS accessibility_metric,
+    step1.n_geog
 FROM step3
 INNER JOIN step1 USING (name)
 ORDER BY accessibility_metric DESC

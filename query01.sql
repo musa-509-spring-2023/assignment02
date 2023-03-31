@@ -20,7 +20,7 @@ septa_bus_stop_blockgroups as (
 septa_bus_stop_surrounding_population as (
     select
         stops.stop_id,
-        sum(pop.total::numeric) as estimated_pop_800m
+        sum(pop.total) as estimated_pop_800m
     from septa_bus_stop_blockgroups as stops
     inner join census.population_2020 as pop using (geoid)
     group by stops.stop_id

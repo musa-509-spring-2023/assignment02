@@ -225,7 +225,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     ```
 
     **Discussion: The boundary of Penn's main campus was downloaded from OpenStreetMap.**
-    ![plot](.campus.png)
+    ![plot](./campus.png)
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

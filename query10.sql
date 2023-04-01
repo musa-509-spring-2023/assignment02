@@ -1,17 +1,27 @@
-WITH Meyerson AS
-(SELECT *
-FROM phl.campus_buildings
-WHERE address = '220-30 S 34TH ST' ),
+WITH Meyerson AS (SELECT *
+    FROM Phl.Campus_Buildings
+    WHERE Address = '220-30 S 34TH ST'
+),
 
-t1 AS 
-(SELECT stop_id, stop_name, stop_lon, stop_lat, ROUND(ST_Distance(Meyerson.geog, stops.geog)), 
-CASE 
-	WHEN ST_Azimuth(ST_Centroid(Meyerson.geog), stops.geog) < 90 THEN 'NE'
-	WHEN ST_Azimuth(ST_Centroid(Meyerson.geog), stops.geog) BETWEEN 90 AND 180 THEN 'SE'
-	WHEN ST_Azimuth(ST_Centroid(Meyerson.geog), stops.geog) BETWEEN 180 AND 270 THEN 'SW'
-	ELSE 'NW'
-END AS direction
-FROM septa.rail_stops stops, Meyerson)
+T1 AS (SELECT
+    Stop_Id,
+    Stop_Name,
+    Stop_Lon,
+    Stop_Lat,
+    ROUND(ST_DISTANCE(Meyerson.Geog, Stops.Geog)),
+    CASE
+        WHEN ST_AZIMUTH(ST_CENTROID(Meyerson.Geog), Stops.Geog) < 90 THEN 'NE'
+        WHEN ST_AZIMUTH(ST_CENTROID(Meyerson.Geog), Stops.Geog) BETWEEN 90 AND 180 THEN 'SE'
+        WHEN ST_AZIMUTH(ST_CENTROID(Meyerson.Geog), Stops.Geog) BETWEEN 180 AND 270 THEN 'SW'
+        ELSE 'NW'
+    END AS Direction
+    FROM Septa.Rail_Stops AS Stops, Meyerson
+)
 
-SELECT stop_id, stop_name, CONCAT (round, ' meters ', direction, ' of Meyerson Hall') stop_desc, stop_lon, stop_lat
-FROM t1
+SELECT
+    Stop_Id,
+    Stop_Name,
+    Stop_Lon,
+    Stop_Lat,
+    CONCAT(Round, ' meters ', Direction, ' of Meyerson Hall') AS Stop_Desc
+FROM T1

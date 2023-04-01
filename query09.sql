@@ -1,10 +1,10 @@
-WITH Meyerson AS
-(SELECT *
-FROM phl.campus_buildings
-WHERE address = '220-30 S 34TH ST' )
+WITH Meyerson AS (SELECT *
+    FROM Phl.Campus_Buildings
+    WHERE Address = '220-30 S 34TH ST'
+)
 
 
-SELECT geoid
-FROM census.blockgroups_2020 block
+SELECT Geoid
+FROM Census.Blockgroups_2020 AS Block
 INNER JOIN Meyerson
-ON ST_Covers(ST_SetSRID(block.geog,4326), Meyerson.geog)
+    ON ST_COVERS(ST_SETSRID(Block.Geog, 4326), Meyerson.Geog)

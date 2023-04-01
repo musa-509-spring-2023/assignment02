@@ -199,7 +199,7 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Description: The metric is calculated this way: (the number of stops in side the neighborhood)/(the area(square km) of the neighborhood). The metric can be explained as the number of bus stops per square km. The higher this metric, the higher accesibility a neighborhood has.**
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
@@ -224,7 +224,8 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    **Discussion: The boundary of Penn's main campus was downloaded from OpenStreetMap.**
+    ![plot](.campus.png)
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

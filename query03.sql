@@ -1,4 +1,4 @@
-SELECT parcels.address, stops.stop_name, stops.distance
+SELECT parcels.address parcel_address, stops.stop_name, stops.distance
 FROM phl.pwd_parcels parcels
 CROSS JOIN LATERAL (
 	SELECT stops.stop_name, stops.geog, stops.geog <-> parcels.geog AS distance

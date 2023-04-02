@@ -5,13 +5,33 @@ county block groups have a geoid prefix of 42101 -- that's 42 for the
 state of PA, and 101 for Philadelphia county)?
 */
 
-SELECT bs.stop_id, ST_SetSRID(ST_MakePoint(bs.stop_lon, bs.stop_lat), 4326) AS stop_geog, SUM(population) AS total_population
-FROM septa.bus_stops AS bs
-JOIN census.blockgroups_2020 AS bg ON ST_DWithin(ST_SetSRID(ST_MakePoint(bs.stop_lon, bs.stop_lat), 4326)::geography, bg.geom::geography, 800)
-JOIN census.population_2020 AS pop ON bg.geoid = pop.blockgroup_id
-WHERE bg.geoid LIKE '42101%'
-GROUP BY bs.stop_id, stop_geog
-HAVING SUM(population) > 500
-ORDER BY total_population
-LIMIT 8
+with
+
+septa_bus_stop_blockgroups as (
+    select
+        stops.stop_id,
+        '1500000US' || bg.geoid as geoid
+    from septa.bus_stops as stops
+    inner join census.blockgroups_2020 as bg
+        on st_dwithin(stops.geography, bg.geography, 800)
+),
+
+septa_bus_stop_surrounding_population as (
+    select
+        stops.stop_id,
+        sum(pop.total) as estimated_pop_800m
+    from septa_bus_stop_blockgroups as stops
+    inner join census.population_2020 as pop using (geoid)
+    group by stops.stop_id
+)
+
+select
+    stops.stop_name,
+    pop.estimated_pop_800m,
+    stops.geography
+from septa_bus_stop_surrounding_population as pop
+inner join septa.bus_stops as stops using (stop_id)
+order by pop.estimated_pop_800m desc
+limit 8
+
 

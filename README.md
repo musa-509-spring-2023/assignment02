@@ -199,7 +199,7 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Description:** First, I identify the bus stops that offer wheelchair boarding and designate them as accessible bus stops. Then, I calculate two ratios. The first is the accessible bus stops ratio, which is the ratio of accessible bus stops to inaccessible bus stops. The second is the area ratio, which is the ratio of accessible bus stops to the neighborhood area.For the final accessibility metric, I assign a weight of 0.7 to the accessible bus stops ratio, as I believe this is the more important factor in determining accessibility. The area ratio is weighted at 0.3, as it is dependent on the size of the neighborhood, which can vary greatly.
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
@@ -224,7 +224,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    **Discussion:**  I am using the Azavea neighborhood datasets and have selected the neighborhood named "University City," which primarily encompasses the area around Penn's campus.
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
@@ -234,6 +234,7 @@ There are several datasets that are prescribed for you to use in this part. Your
         geo_id text
     )
     ```
+     **Discussion:** I am using the address column in the pwd_parcels datasets. However, there is no listed address for Meyerson Hall. Therefore, I have selected the closest available address, which is 3401-39 WALNUT ST. I am assuming that both locations are in the same block group.
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. SQL's `CASE` statements may be helpful for some operations.
 
@@ -251,3 +252,5 @@ There are several datasets that are prescribed for you to use in this part. Your
    As an example, your `stop_desc` for a station stop may be something like "37 meters NE of 1234 Market St" (that's only an example, feel free to be creative, silly, descriptive, etc.)
 
    >**Tip when experimenting:** Use subqueries to limit your query to just a few rows to keep query times faster. Once your query is giving you answers you want, scale it up. E.g., instead of `FROM tablename`, use `FROM (SELECT * FROM tablename limit 10) as t`.
+   
+   **Discussion:** I am using the 2022 crime incidents datasets from OpenDataPhilly, which can be found at https://www.opendataphilly.org/dataset/crime-incidents/resource/20117027-ae08-48f9-8cc2-c777abda9cfe. To determine the safety level for each rail station, I am calculating the number of crime incidents within a 3 km radius of each station. I then categorize the resulting number of incidents as either Safe, Moderately Safe, or Unsafe.

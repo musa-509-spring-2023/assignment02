@@ -1,15 +1,14 @@
 SELECT
-    pwd.address AS address,
+    pwd.address AS parcel_address,
     stops.stop_name AS stop_name,
-    ST_DISTANCE(pwd.geog, stops.geog) AS distance
+    stops.dist AS distance
 FROM phl.pwd_parcels AS pwd
 CROSS JOIN LATERAL (
     SELECT
         stops.stop_name,
-        stops.geog,
-        stops.geog <-> pwd.geog AS nn
+        stops.geog <-> st_setsrid(pwd.geog, 4326) AS dist
     FROM septa.bus_stops AS stops
-    ORDER BY stops.nn
+    ORDER BY dist
     LIMIT 1
 ) AS stops
 ORDER BY distance DESC

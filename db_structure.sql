@@ -30,6 +30,8 @@ running the following command from the command line:
 
 */
 
+--- BUS STOPS ---
+
 -- Add a column to the septa.bus_stops table to store the geometry of each stop.
 alter table septa.bus_stops
 add column if not exists geog geography;
@@ -39,5 +41,63 @@ set geog = st_makepoint(stop_lon, stop_lat)::geography;
 
 -- Create an index on the geog column.
 create index if not exists septa_bus_stops__geog__idx
-on septa.bus_stops using gist
-(geog);
+on septa.bus_stops using gist(geog);
+
+-- Add index to geom column of septa.bus_stops
+create index if not exists septa_bus_stops__geom__dix
+on septa.bus_stops using gist(geom);
+
+--- WATER DEPT PARCELS---
+
+-- Add a column to the phl.pwd_parcels table to store the geometry of each parcel
+alter table phl.pwd_parcels
+add column if not exists geom geometry;
+
+update phl.pwd_parcels
+set geom = st_transform(geog::geometry, 4326);
+
+-- Create index on the geom column.
+create index if not exists phl_pwd_parcels__geom__idx
+on septa.bus_stops using gist(geom);
+
+-- Add a column to the phl.pwd_parcels table to store the centroid of each parcel
+alter table phl.pwd_parcels
+add column if not exists pt_geog geography;
+
+update phl.pwd_parcels
+set pt_geog = st_centroid(geog);
+
+-- Create index on the geom column.
+create index if not exists phl_pwd_parcels__pt_geog__idx
+on phl.pwd_parcels using gist(pt_geog);
+
+--- BUS SHAPES ---
+
+-- Add a column to bus_shapes table to store geography of each shape
+alter table septa.bus_shapes
+add column if not exists geog geography;
+
+update septa.bus_shapes
+set geog = st_makepoint(shape_pt_lon, shape_pt_lat, 4326)::geography;
+
+-- Add index to geom column of septa.bus_shapes
+create index if not exists septa_bus_shapes__geog__idx
+on septa.bus_shapes using gist(geog);
+
+-- Create a new shapes table to store the shape line geometries
+
+create table shape_geoms (
+    shape_id text NOT NULL,
+    shape_geom geometry('LINESTRING', 4326),
+    CONSTRAINT shape_geom_pkey PRIMARY KEY (shape_id)
+);
+
+create index shape_geoms_key_idx on shapes (shape_id);
+
+-- Put shape data into shape_geoms to create lines
+
+INSERT INTO shape_geoms
+SELECT shape_id, ST_MakeLine(array_agg(
+    ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326) ORDER BY shape_pt_sequence))
+FROM shapes
+GROUP BY shape_id;

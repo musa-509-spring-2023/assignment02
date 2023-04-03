@@ -47,6 +47,8 @@ on septa.bus_stops using gist(geog);
 create index if not exists septa_bus_stops__geom__dix
 on septa.bus_stops using gist(geom);
 
+-- Add a column for 
+
 --- WATER DEPT PARCELS---
 
 -- Add a column to the phl.pwd_parcels table to store the geometry of each parcel
@@ -86,18 +88,35 @@ on septa.bus_shapes using gist(geog);
 
 -- Create a new shapes table to store the shape line geometries
 
-create table shape_geoms (
+create table septa.shape_geoms (
     shape_id text NOT NULL,
     shape_geom geometry('LINESTRING', 4326),
     CONSTRAINT shape_geom_pkey PRIMARY KEY (shape_id)
 );
 
-create index shape_geoms_key_idx on shapes (shape_id);
+create index shape_geoms_key_idx on septa.bus_shapes (shape_id);
 
 -- Put shape data into shape_geoms to create lines
 
-INSERT INTO shape_geoms
+INSERT INTO septa.shape_geoms
 SELECT shape_id, ST_MakeLine(array_agg(
     ST_SetSRID(ST_MakePoint(shape_pt_lon, shape_pt_lat),4326) ORDER BY shape_pt_sequence))
-FROM shapes
+FROM septa.bus_shapes
 GROUP BY shape_id;
+
+--- STOP TIMES ---
+
+DROP TABLE IF EXISTS septa.stop_times;
+
+CREATE TABLE septa.stop_times
+(
+trip_id               TEXT,
+arrival_time          DATE,
+departure_time        DATE,
+stop_id               TEXT,
+stop_sequence         INTEGER
+);
+
+COPY septa.stop_times
+FROM '"C:\Users\montb\Documents\MUSASpring\MUSA509\Data\gtfs_public\google_bus\stop_times.txt'
+WITH (FORMAT csv, HEADER true);

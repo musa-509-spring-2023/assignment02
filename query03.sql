@@ -14,9 +14,9 @@ FROM phl.pwd_parcels AS parcels
 CROSS JOIN LATERAL (
     SELECT
         stops.stop_name,
-        stops.geog
+        stops.geog,
+        stops.geog <-> parcels.geog
     FROM septa.bus_stops AS stops
-    ORDER BY stops.geog <-> parcels.geog
     LIMIT 1
 ) AS stops
 ORDER BY distance DESC;

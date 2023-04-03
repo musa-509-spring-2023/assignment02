@@ -193,13 +193,21 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-5.  Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods.
+5.  Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. 
 
     _NOTE: There is no automated test for this question, as there's no one right answer. With urban data analysis, this is frequently the case._
 
     Discuss your accessibility metric and how you arrived at it below:
 
     **Description:**
+
+    My desired metric would be to combine septa.bus_stop's wheelchair_boarding category with septa.fare_attributes payment_method, checking both whether a wheelchair user could pay for their trip before the bus came and then board with ease. However, all of SEPTA's stops and zones require payment during boarding according to the data field, so that option couldn't be tried in this assignment. 
+    
+    Alternatively, I combined septa.stop_times trip frequency per route at the particular stop with the wheelchair_boarding metric. Everyone enjoys more frequent service so that they aren't punished as bad for missing a bus. I imagine this could be doubly important for those with mobility disabilities, who require more time and variables to get to the stop. I set the threshold at the median.
+    
+    If a stop has no rides with wheelchair boarding, then it's given a 0 regardless of its ride frequency. If it does have wheelchair boarding, then the average route frequency for that stop is given. Only if the stop hosts rides with wheelchair boarding and its routes on average have more frequent service than the median trip count, then it's accessible. Those 0's and 1's are averaged for the neighborhood's score. 
+    
+    This metric is still too all-or-nothing, as my top 5 and bottom 5 are all 0 or 1 for this metric. Additional metrics would help, but it's impressive when an area like Strawberry Mansion has 120 stops and they all receive frequent service, but this sketchy standard.
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 

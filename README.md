@@ -193,13 +193,19 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-5.  Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods.
+5.  Rate neighborhoods by their bus stop accessibility for wheelchairs. Use Azavea's neighborhood dataset from OpenDataPhilly along with an appropriate dataset from the Septa GTFS bus feed. Use the [GTFS documentation](https://gtfs.org/reference/static/) for help. Use some creativity in the metric you devise in rating neighborhoods. 
 
     _NOTE: There is no automated test for this question, as there's no one right answer. With urban data analysis, this is frequently the case._
 
     Discuss your accessibility metric and how you arrived at it below:
 
     **Description:**
+
+    My desired metric would be to combine septa.bus_stop's wheelchair_boarding category with septa.fare_attributes payment_method, checking both whether a wheelchair user could pay for their trip before the bus came and then board with ease. However, all of SEPTA's stops and zones require payment during boarding according to the data field, so that option couldn't be tried in this assignment. 
+    
+    Alternatively, I combined septa.stop_times trip frequency per route at the particular stop with the wheelchair_boarding metric. Everyone enjoys more frequent service so that they aren't punished as bad for missing a bus. I imagine this could be doubly important for those with mobility disabilities, who require more time and variables to get to the stop.
+    
+    
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 

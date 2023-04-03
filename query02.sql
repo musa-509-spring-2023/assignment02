@@ -13,7 +13,8 @@ septa_bus_stop_blockgroups as (
         '1500000US' || bg.geoid as geoid
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
-        on st_dwithin(stops.geography, bg.geography, 800)
+        on st_dwithin(geog1: stops.geog, geog2: bg.geog, tolerance: 800)
+    where bg.countyfp = '101'
 ),
 
 septa_bus_stop_surrounding_population as (
@@ -23,15 +24,15 @@ septa_bus_stop_surrounding_population as (
     from septa_bus_stop_blockgroups as stops
     inner join census.population_2020 as pop using (geoid)
     group by stops.stop_id
+    having
+        sum(pop.total) > 500
 )
 
 select
     stops.stop_name,
     pop.estimated_pop_800m,
-    stops.geography
+    stops.geog
 from septa_bus_stop_surrounding_population as pop
 inner join septa.bus_stops as stops using (stop_id)
-order by pop.estimated_pop_800m desc
+order by pop.estimated_pop_800m
 limit 8
-
-

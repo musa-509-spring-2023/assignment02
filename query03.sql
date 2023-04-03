@@ -1,8 +1,10 @@
 /*
-Which eight bus stops have the smallest population above 500 people
-inside of Philadelphia within 800 meters of the stop (Philadelphia
-county block groups have a geoid prefix of 42101 -- that's 42 for the
-state of PA, and 101 for Philadelphia county)?
+Using the Philadelphia Water Department Stormwater Billing Parcels dataset,
+pair each parcel with its closest bus stop. The final result should give the
+parcel address, bus stop name, and distance apart in meters. Order by distance
+(largest on top).
+
+Your query should run in under two minutes.
 */
 
 

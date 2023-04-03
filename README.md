@@ -234,6 +234,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     **Discussion:**
 
+I used the water department parcels and filtered by their ownership, adding other pieces to fill out the main campus where there were evident gaps. Unfortunately this technique yields small gaps due to lots not overlapping, which is probably why my query's response is 0. My "campus" intersects 30 block groups, so I know it's covering an appropriate area -- I'd just need to find a way to cleanly generate that campus shape.
+
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
     **Structure (should be a single value):**

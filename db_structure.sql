@@ -120,3 +120,35 @@ stop_sequence         INTEGER
 COPY septa.stop_times
 FROM '"C:\Users\montb\Documents\MUSASpring\MUSA509\Data\gtfs_public\google_bus\stop_times.txt'
 WITH (FORMAT csv, HEADER true);
+
+--- PANERA CAFES ---
+
+-- create table
+DROP TABLE IF EXISTS panera.cafes;
+
+CREATE TABLE panera.cafes
+(
+cafe_id               INTEGER,
+cafe_address          TEXT,
+cafe_lon              DOUBLE PRECISION,
+cafe_lat              DOUBLE PRECISION
+);
+
+-- insert data
+
+COPY panera.cafes
+FROM 'C:\Users\montb\Documents\MUSASpring\MUSA509\assignment02\panera_locations_greaterPHL.csv'
+WITH (FORMAT csv, HEADER true);
+
+-- Add a column to the panera.cafes table to store the geography of each cafe
+alter table panera.cafes
+add column if not exists geog geography;
+
+update panera.cafes
+set geog = ST_SetSRID(st_makepoint(cafe_lon, cafe_lat), 4326)::geography;
+
+-- Add index to geom column of panera.cafes
+create index if not exists panera_cafes__geog__idx
+on panera.cafes using gist(geog);
+
+

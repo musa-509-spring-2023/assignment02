@@ -1,8 +1,12 @@
 /*
-Which eight bus stops have the smallest population above 500 people
-inside of Philadelphia within 800 meters of the stop (Philadelphia
-county block groups have a geoid prefix of 42101 -- that's 42 for the
-state of PA, and 101 for Philadelphia county)?
+You're tasked with giving more contextual information to rail stops
+to fill the stop_desc field in a GTFS feed. Using any of the data sets
+above, PostGIS functions (e.g., ST_Distance, ST_Azimuth, etc.),
+and PostgreSQL string functions, build a description (alias as stop_desc)
+for each stop. Feel free to supplement with other datasets
+(must provide link to data used so it's reproducible),
+and other methods of describing the relationships.
+SQL's CASE statements may be helpful for some operations.
 */
 
 

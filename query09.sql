@@ -1,8 +1,7 @@
 /*
-Which eight bus stops have the smallest population above 500 people
-inside of Philadelphia within 800 meters of the stop (Philadelphia
-county block groups have a geoid prefix of 42101 -- that's 42 for the
-state of PA, and 101 for Philadelphia county)?
+With a query involving PWD parcels and census block groups,
+find the geo_id of the block group that contains Meyerson Hall.
+ST_MakePoint() and functions like that are not allowed.
 */
 
 

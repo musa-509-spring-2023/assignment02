@@ -14,3 +14,7 @@ WHERE ST_Contains(
     (SELECT campus_boundary_geom FROM penn_campus_boundary),
     census_block_groups.geom
 );
+
+SELECT COUNT(DISTINCT census_block_group)
+FROM census_blocks
+WHERE ST_Within(census_blocks.geom, (SELECT boundary.geom FROM boundary WHERE boundary.name = 'University City District Boundary'))

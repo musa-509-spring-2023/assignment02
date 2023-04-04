@@ -4,7 +4,9 @@ contains. Discuss which dataset you chose for defining Penn's campus.
 */
 
 
-/*
+/* The dataset from Open Philly Data is used to define the PEnn's campus.
+
+ */
 
 SELECT COUNT(*) AS num_block_groups
 FROM census_block_groups

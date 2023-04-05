@@ -2,16 +2,15 @@ with
 
 septa_bus_stop_blockgroups as (
     select 
-        stops.stop_id, '1500000US' || bg.geoid as geoid,
+        stops.stop_id, 
+        '1500000US' || bg.geoid as geoid,
         bg.statefp as statefp,
         bg.countyfp as countyfp
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
-        on st_dwithin(st_setsrid(stops.geog::geography, 4326), st_setsrid(bg.geog::geography, 4326), 800)
-where bg.statefp::integer = 42 and bg.countyfp::integer = 101
-)
-
-,
+    on st_dwithin(st_setsrid(stops.geog::geography, 4326), st_setsrid(bg.geog::geography, 4326), 800)
+    where bg.statefp::integer = 42 and bg.countyfp::integer = 101
+),
 
 septa_bus_stop_surrounding_population as (
     select 

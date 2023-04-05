@@ -1,5 +1,5 @@
 WITH bus_length AS (
-    SELECT 
+    SELECT
         shapes.shape_id AS shape_id,
         ST_MAKELINE(ARRAY_AGG(ST_SETSRID(ST_MAKEPOINT(shapes.shape_pt_lon, shapes.shape_pt_lat), 4326) ORDER BY shapes.shape_pt_sequence)) AS shape_geog,
         ST_LENGTH(ST_MAKELINE(ARRAY_AGG(ST_SETSRID(ST_MAKEPOINT(shapes.shape_pt_lon, shapes.shape_pt_lat), 4326) ORDER BY shapes.shape_pt_sequence))) AS shape_length

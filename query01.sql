@@ -18,7 +18,7 @@ septa_bus_stop_surrounding_population as (
     group by stops.stop_id
 )
 
-select 
+select
     stops.stop_name,
     pop.estimated_pop_800m,
     stops.geog

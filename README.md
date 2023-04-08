@@ -200,7 +200,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     Discuss your accessibility metric and how you arrived at it below:
 
     **Description:**
-
+    With the bus stops that has wheelchair boarding, I calculate the accessible ratio by dividing number of bus stops with boarding by those without. Then the area ratio is calculated by the ratio between accessible bus stops to the neighborhood area. Then to obtain the accessibility metric, I assign a weight of 0.8 to the accessible ratio and 0.2 to the area ratio based on their importance.
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
 7.  What are the _bottom five_ neighborhoods according to your accessibility metric?
@@ -225,7 +225,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     ```
 
     **Discussion:**
-
+    I use the part of azavea neighborhood dataset with "university city" neighborhood name which i believe could be used for estimating Penn's campus.
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
     **Structure (should be a single value):**

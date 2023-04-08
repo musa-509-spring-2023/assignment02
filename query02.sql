@@ -1,4 +1,5 @@
--- Calculate estimated population within 800 meters of SEPTA bus stops in Philadelphia
+-- Calculate estimated population within 800 meters of SEPTA bus stops in Philadelphia,
+-- filtering only stops with more than 500 people within 800 meters.
 WITH septa_stops_blockgroups AS (
     -- Find all block groups within 800 meters of each bus stop
     SELECT
@@ -23,7 +24,8 @@ septa_stops_population AS (
     GROUP BY
         stops.stop_id
 )
--- Retrieve the stop name, geographic location, and estimated population for the top 8 stops
+-- Retrieve the stop name, geographic location, and estimated population for stops with more than 500 people within 800 meters,
+-- sorted by estimated population in ascending order, and limited to the top 8 stops.
 SELECT
     stops.stop_name,
     population.estimated_population AS estimated_pop_800m,
@@ -31,6 +33,8 @@ SELECT
 FROM
     septa_stops_population AS population
     INNER JOIN septa.bus_stops AS stops ON population.stop_id = stops.stop_id
+WHERE
+    estimated_pop_800m > 500
 ORDER BY
-    population.estimated_population DESC
+    estimated_pop_800m ASC
 LIMIT 8;

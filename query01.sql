@@ -6,6 +6,7 @@
 
 with
 
+/*buffer school with 800 and choose blockgroups*/
 septa_bus_stop_blockgroups as (
     select
         stops.stop_id,
@@ -15,6 +16,7 @@ septa_bus_stop_blockgroups as (
         on st_dwithin(stops.geog, bg.geog, 800)
 ),
 
+/*calculate sum of the population among different stops*/
 septa_bus_stop_surrounding_population as (
     select
         stops.stop_id,

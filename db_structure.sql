@@ -39,5 +39,4 @@ set geog = st_makepoint(stop_lon, stop_lat)::geography;
 
 -- Create an index on the geog column.
 create index if not exists septa_bus_stops__geog__idx
-on septa_bus_stops using gist
-(geog);
+on septa_bus_stops using gist(geog);

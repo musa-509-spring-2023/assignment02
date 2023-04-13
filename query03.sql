@@ -3,19 +3,20 @@ Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair
 */
 
 SELECT 
-	bus.stop_name,
-	parcel.address AS parcel_address,
-	parcel.dist AS distance,
-	bus.geom
-FROM septa.bus_stops AS bus
+    parcels.address AS parcel_address,
+    parcels.geog AS parcel_geog,
+    join_table.stop_name,
+    join_table.geog AS stop_geog,
+    join_table.dist AS distance
+FROM phl.pwd_parcels AS parcels
 CROSS JOIN LATERAL(
-	SELECT 
-		parcel.address,
-		parcel.geom,
-		parcel.geom <-> bus.geom AS dist
-	FROM phl.pwd_parcels AS parcel
-	ORDER BY dist
-	LIMIT 1			
-)
-
-//https://postgis.net/workshops/postgis-intro/knn.html
+SELECT 
+    bus.stop_name,
+    bus.geog,
+    parcels.geog <-> bus.geog AS dist
+    FROM septa.bus_stops AS bus
+    ORDER BY dist
+    LIMIT 1			
+) AS join_table
+ORDER BY dist DESC
+LIMIT 5

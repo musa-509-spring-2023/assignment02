@@ -165,7 +165,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     **Structure:**
     ```sql
     (
-        address text,  -- The address of the parcel
+        parcel_address text,  -- The address of the parcel
         stop_name text,  -- The name of the bus stop
         distance double precision  -- The distance apart in meters
     )
@@ -199,7 +199,7 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    The accessibility metric I calculated took the proportion of bus stops that are wheel chair accessible divived by the area of the neighorbood. 
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
@@ -224,7 +224,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    I used the University City polygon as a proxy for Penn's campus. This is imperfect but was done so for the sake of time.
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

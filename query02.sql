@@ -5,34 +5,37 @@ county block groups have a geoid prefix of 42101 -- that's 42 for the
 state of PA, and 101 for Philadelphia county)?
 */
 
-with
 
-septa_bus_stop_blockgroups as (
-    select
-        stops.stop_id,
-        '1500000US' || bg.geoid as geoid
-    from septa.bus_stops as stops
-    inner join census.blockgroups_2020 as bg
-        on st_dwithin(geog1: stops.geog, geog2: bg.geog, tolerance: 800)
-    where bg.countyfp = '101'
+WITH
+septa_bus_stop_blockgroups AS (
+    SELECT stops.stop_id,
+           '1500000US' || bg.geoid AS geoid
+    FROM septa.bus_stops AS stops
+             INNER JOIN census.blockgroups_2020 AS bg
+                        ON ST_DWithin(stops.geography, bg.geography, 800)
+    WHERE bg."COUNTYFP" = '101'
 ),
 
-septa_bus_stop_surrounding_population as (
-    select
-        stops.stop_id,
-        sum(pop.total) as estimated_pop_800m
-    from septa_bus_stop_blockgroups as stops
-    inner join census.population_2020 as pop using (geoid)
-    group by stops.stop_id
-    having
-        sum(pop.total) > 500
+septa_bus_stop_surrounding_population AS (
+    SELECT stops.stop_id,
+           SUM(pop.total) AS estimated_pop_800m
+    FROM septa_bus_stop_blockgroups AS stops
+             INNER JOIN census.population_2020 AS pop using (geoid)
+    GROUP BY stops.stop_id
+    HAVING SUM(pop.total) > 500
 )
 
-select
+SELECT
     stops.stop_name,
     pop.estimated_pop_800m,
-    stops.geog
-from septa_bus_stop_surrounding_population as pop
-inner join septa.bus_stops as stops using (stop_id)
-order by pop.estimated_pop_800m
-limit 8
+    stops.geography
+
+FROM septa_bus_stop_surrounding_population AS pop
+INNER JOIN septa.bus_stops AS stops using (stop_id)
+ORDER BY pop.estimated_pop_800m
+LIMIT 8
+
+
+
+
+

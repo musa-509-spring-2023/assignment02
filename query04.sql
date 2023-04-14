@@ -11,9 +11,9 @@ WITH routes_and_trips AS (
         s.shape_id,
         ST_MakeLine(ST_MakePoint(s.shape_pt_lon, s.shape_pt_lat)::geometry ORDER BY s.shape_pt_sequence) AS shape_geom
     FROM
-        bus_routes r
-        INNER JOIN bus_trips t ON r.route_id = t.route_id
-        INNER JOIN bus_shapes s ON t.shape_id = s.shape_id
+        septa.bus_routes r
+        INNER JOIN septa.bus_trips t ON r.route_id = t.route_id
+        INNER JOIN septa.bus_shapes s ON t.shape_id = s.shape_id
 ),
 route_lengths AS (
     SELECT
@@ -43,7 +43,7 @@ WHERE
             2
     )
 ORDER BY
-    shape_length DESC;
+    shape_length DESC
 
 
 

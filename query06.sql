@@ -60,4 +60,4 @@ FROM
   neighborhood_accessibility
 ORDER BY
   accessibility_metric DESC
-LIMIT 5;
+LIMIT 5

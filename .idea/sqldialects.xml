@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/db_structure.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/query01.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/query02.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/query03.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/query04.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/query05.sql" dialect="PostgreSQL" />
   </component>
 </project>

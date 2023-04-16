@@ -3,47 +3,37 @@ Using the bus_shapes, bus_routes, and bus_trips tables from GTFS bus feed, find 
 
 Your query should run in under two minutes.
 */
-
-WITH routes_and_trips AS (
-    SELECT
-        r.route_short_name,
-        t.trip_headsign,
-        s.shape_id,
-        ST_MakeLine(ST_MakePoint(s.shape_pt_lon, s.shape_pt_lat)::geometry ORDER BY s.shape_pt_sequence) AS shape_geom
-    FROM
-        septa.bus_routes r
-        INNER JOIN septa.bus_trips t ON r.route_id = t.route_id
-        INNER JOIN septa.bus_shapes s ON t.shape_id = s.shape_id
+WITH route_shapes AS (
+  SELECT
+    shape_id,
+    ST_MakeLine(ST_MakePoint(shape_pt_lon, shape_pt_lat) ORDER BY shape_pt_sequence) AS shape_geog
+  FROM
+    septa.bus_shapes
+  GROUP BY
+    shape_id
 ),
-route_lengths AS (
-    SELECT
-        route_short_name,
-        trip_headsign,
-        ST_Length(shape_geom::geography) AS shape_length
-    FROM
-        routes_and_trips
+trip_shapes AS (
+  SELECT
+    septa.bus_trips.trip_id,
+    shape_geog,
+    ST_Length(shape_geog::geography) AS shape_length
+  FROM
+    route_shapes
+    JOIN septa.bus_trips ON septa.bus_trips.shape_id = route_shapes.shape_id
 )
 SELECT
-    route_short_name,
-    trip_headsign,
-    shape_geom::geography AS shape_geog,
-    shape_length
+  septa.bus_routes.route_short_name,
+  septa.bus_trips.trip_headsign,
+  trip_shapes.shape_geog,
+  trip_shapes.shape_length
 FROM
-    routes_and_trips
-    JOIN route_lengths USING (route_short_name, trip_headsign)
+  septa.bus_routes
+  JOIN septa.bus_trips ON bus_routes.route_id = bus_trips.route_id
+  JOIN trip_shapes ON trip_shapes.trip_id = bus_trips.trip_id
 WHERE
-    shape_length IN (
-        SELECT
-            DISTINCT shape_length
-        FROM
-            route_lengths
-        ORDER BY
-            shape_length DESC
-        LIMIT
-            2
-    )
+  bus_routes.route_type::integer = 3  -- Only include bus routes
 ORDER BY
-    shape_length DESC
-
+  trip_shapes.shape_length DESC
+LIMIT 2
 
 

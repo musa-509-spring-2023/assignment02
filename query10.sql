@@ -62,4 +62,4 @@ FROM
   JOIN azavea.neighborhoods n ON ppn.name = n.name
   JOIN census.block_upenn_2020 bu ON ST_Intersects(ST_MakePoint(rs.stop_lon, rs.stop_lat), bu.geometry)
 ORDER BY
-  stop_id;
+  stop_id

@@ -8,13 +8,6 @@ contains. Discuss which dataset you chose for defining Penn's campus.
 
  */
 
-SELECT COUNT(*) AS num_block_groups
-FROM census_block_groups
-WHERE ST_Contains(
-    (SELECT campus_boundary_geom FROM penn_campus_boundary),
-    census_block_groups.geom
-);
-
-SELECT COUNT(DISTINCT census_block_group)
-FROM census_blocks
-WHERE ST_Within(census_blocks.geom, (SELECT boundary.geom FROM boundary WHERE boundary.name = 'University City District Boundary'))
+SELECT COUNT(*) as count_block_groups
+FROM census.blockgroups_2020 bg
+WHERE ST_Contains((SELECT ST_Union(geometry) FROM census.block_upenn_2020), bg.geometry)

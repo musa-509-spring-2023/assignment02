@@ -1,42 +1,65 @@
-/*
-You're tasked with giving more contextual information to rail stops
-to fill the stop_desc field in a GTFS feed. Using any of the data sets
-above, PostGIS functions (e.g., ST_Distance, ST_Azimuth, etc.),
-and PostgreSQL string functions, build a description (alias as stop_desc)
-for each stop. Feel free to supplement with other datasets
-(must provide link to data used so it's reproducible),
-and other methods of describing the relationships.
-SQL's CASE statements may be helpful for some operations.
-*/
-
 SELECT
-    stop_id,
-    stop_name,
-    CASE
-        WHEN stop_type = '1' THEN 'Rail Station'
-        WHEN stop_type = '2' THEN 'Bus Station'
-        WHEN stop_type = '3' THEN 'Ferry Terminal'
-        ELSE 'Unknown Stop Type'
-    END || ' - ' || ST_AsText(ST_Transform(geom, 4326)) AS stop_desc,
-    stop_lon,
-    stop_lat
-FROM (
+  stop_id,
+  stop_name,
+  CASE
+    -- Check if rail stop is within University of Pennsylvania boundary
+    WHEN ST_Within(ST_MakePoint(rs.stop_lon, rs.stop_lat), bu.geometry) THEN
+      -- Get the nearest address to the rail stop
+      CONCAT(
+        ROUND(ST_Distance(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry))::integer,
+        ' meters ',
+        CASE
+          WHEN ST_Azimuth(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry) BETWEEN 0 AND 90 THEN 'NE'
+          WHEN ST_Azimuth(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry) BETWEEN 90 AND 180 THEN 'SE'
+          WHEN ST_Azimuth(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry) BETWEEN 180 AND 270 THEN 'SW'
+          ELSE 'NW'
+        END,
+        ' of ',
+        pp."ADDRESS",
+        ' in ',
+        n.name,
+        ', University of Pennsylvania'
+      )
+    ELSE
+      -- Get the nearest address to the rail stop
+      CONCAT(
+        ROUND(ST_Distance(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry))::integer,
+        ' meters ',
+        CASE
+          WHEN ST_Azimuth(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry) BETWEEN 0 AND 90 THEN 'NE'
+          WHEN ST_Azimuth(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry) BETWEEN 90 AND 180 THEN 'SE'
+          WHEN ST_Azimuth(ST_MakePoint(rs.stop_lon, rs.stop_lat), pp.geometry) BETWEEN 180 AND 270 THEN 'SW'
+          ELSE 'NW'
+        END,
+        ' of ',
+        pp."ADDRESS",
+        ' in ',
+        n.name
+      )
+  END AS stop_desc,
+  rs.stop_lon,
+  rs.stop_lat
+FROM
+  septa.rail_stops rs
+  JOIN (
     SELECT
-        stops.stop_id,
-        stops.stop_name,
-        stops.stop_type,
-        ST_SetSRID(ST_MakePoint(stops.stop_lon, stops.stop_lat), 4326) AS geom,
-        stops.stop_lon,
-        stops.stop_lat,
-        row_number() OVER (PARTITION BY stops.stop_id ORDER BY ST_Distance(stops.geom, parcels.geom) ASC) AS closest_parcels_rank
+      p.geometry,
+      p."ADDRESS",
+      n.name,
+      MIN(ST_Distance(ST_MakePoint(rs.stop_lon, rs.stop_lat), p.geometry)) AS distance
     FROM
-        gtfs_stops stops
-        CROSS JOIN LATERAL (
-            SELECT geom FROM pwd_parcels WHERE ST_Contains(pwd_parcels.geom, ST_Transform(ST_SetSRID(ST_MakePoint(stops.stop_lon, stops.stop_lat), 4326), 2272))
-        ) parcels
+      phl.pwd_parcels p
+      CROSS JOIN azavea.neighborhoods n
+      CROSS JOIN septa.rail_stops rs
     WHERE
-        ST_Distance(stops.geom, parcels.geom) <= 200  -- Consider only stops within 200 meters of a parcel
-) stops_with_parcels
-WHERE closest_parcels_rank = 1  -- Only keep stops closest to a parcel
-ORDER BY stop_id;
-
+      n.geometry && p.geometry
+    GROUP BY
+      p.geometry,
+      p."ADDRESS",
+      n.name
+  ) AS ppn ON ST_DWithin(ST_MakePoint(rs.stop_lon, rs.stop_lat), ppn.geometry, ppn.distance)
+  JOIN phl.pwd_parcels pp ON ppn.geometry = pp.geometry
+  JOIN azavea.neighborhoods n ON ppn.name = n.name
+  JOIN census.block_upenn_2020 bu ON ST_Intersects(ST_MakePoint(rs.stop_lon, rs.stop_lat), bu.geometry)
+ORDER BY
+  stop_id;

@@ -21,6 +21,7 @@ septa_bus_stop_surrounding_population AS (
     INNER JOIN census.population_2020 AS pop USING (geoid)
     GROUP BY stops.stop_id
 )
+
 SELECT
     stops.stop_name,
     pop.estimated_pop_800m,

@@ -11,7 +11,7 @@ WITH trip_info AS (
         trips.trip_headsign,
         trips.shape_id
     FROM septa.bus_routes AS bus
-    JOIN septa.bus_trips AS trips ON bus_route_id = trips_route_id
+    JOIN septa.bus_trips AS trips USING (route_id)
 )
 
 SELECT

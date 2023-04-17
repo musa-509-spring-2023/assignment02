@@ -2,6 +2,9 @@
 Using the Philadelphia Water Department Stormwater Billing Parcels dataset, pair each parcel with its closest bus stop. The final result should give the parcel address, bus stop name, and distance apart in meters. Order by distance (largest on top).
 */
 
+CREATE INDEX pwd_parcels_geog_idx ON phl.pwd_parcels USING GIST (geog);
+CREATE INDEX bus_stops_geog_idx ON septa.bus_stops USING GIST (geog);
+
 SELECT 
     parcels.address AS parcel_address,
     parcels.geog AS parcel_geog,

@@ -1,15 +1,17 @@
-CREATE INDEX bus_routes_geog_idx ON phl.pwd_parcels USING GIST (geog);
-CREATE INDEX bus_stops_geog_idx ON septa.bus_stops USING GIST (geog);
+CREATE INDEX bus_routes_geog_idx ON phl.pwd_parcels USING gist (geog);
+CREATE INDEX bus_stops_geog_idx ON septa.bus_stops USING gist (geog);
 
 
 
 WITH trip_info AS (
     SELECT
+        bus.route_id AS bus_route_id,
+        trips.route_id AS trips_route_id,
         bus.route_short_name,
         trips.trip_headsign,
         trips.shape_id
     FROM septa.bus_routes AS bus
-    JOIN septa.bus_trips AS trips ON bus.route_id = trips.route_id
+    JOIN septa.bus_trips AS trips ON bus_route_id = trips_route_id
 )
 
 SELECT

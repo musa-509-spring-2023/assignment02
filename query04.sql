@@ -16,8 +16,8 @@ WITH route_shapes AS (
 trip_shapes AS (
     SELECT
         septa.bus_trips.trip_id,
-        shape_geog,
-        ST_LENGTH(shape_geog::geography) AS shape_length
+        route_shapes.shape_geog,
+        ST_LENGTH(route_shapes.shape_geog::geography) AS shape_length
     FROM
         route_shapes
     INNER JOIN septa.bus_trips ON septa.bus_trips.shape_id = route_shapes.shape_id

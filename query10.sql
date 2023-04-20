@@ -1,11 +1,12 @@
 SELECT
-    stop_id,
-    stop_name,
+    septa.rail_stops.stop_id,
+    septa.rail_stops.stop_name,
     rs.stop_lon,
     rs.stop_lat,
     CASE
         -- Check if rail stop is within University of Pennsylvania boundary
-        WHEN ST_WITHIN(ST_MAKEPOINT(rs.stop_lon, rs.stop_lat), bu.geometry) THEN
+        WHEN ST_WITHIN(ST_MAKEPOINT(rs.stop_lon, rs.stop_lat), bu.geometry)
+            THEN
             -- Get the nearest address to the rail stop
             CONCAT(
                 ROUND(ST_DISTANCE(ST_MAKEPOINT(rs.stop_lon, rs.stop_lat), pp.geometry))::integer,
@@ -62,4 +63,4 @@ INNER JOIN phl.pwd_parcels AS pp ON ppn.geometry = pp.geometry
 INNER JOIN azavea.neighborhoods AS n ON ppn.name = n.name
 INNER JOIN census.block_upenn_2020 AS bu ON ST_INTERSECTS(ST_MAKEPOINT(rs.stop_lon, rs.stop_lat), bu.geometry)
 ORDER BY
-    stop_id
+    septa.rail_stops.stop_id

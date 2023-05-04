@@ -13,19 +13,19 @@ joined AS (
 
 accessible_stops AS (
     SELECT
-        name,
+        stops.name,
         count(*) AS accessible
     FROM joined AS stops
     WHERE stops.wheelchair_boarding = 1
-    GROUP BY name
+    GROUP BY stops.name
 ),
 
 total_stops AS (
     SELECT
-        name,
+        stops.name,
         count(*) AS total
     FROM joined AS stops
-    GROUP BY name
+    GROUP BY stops.name
 )
 
 SELECT

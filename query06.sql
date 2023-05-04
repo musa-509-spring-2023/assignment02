@@ -14,8 +14,8 @@ joined AS (
 accessible_stops AS (
     SELECT
         stops.name,
-        count(*) AS accessible,
-        stops.wheelchair_boarding
+        stops.wheelchair_boarding,
+        count(*) AS accessible
     FROM joined AS stops
     WHERE stops.wheelchair_boarding = 1
     GROUP BY stops.name

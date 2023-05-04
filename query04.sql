@@ -11,7 +11,7 @@ SELECT DISTINCT
     routes.route_short_name,
     trips.trip_headsign,
     len.shape_length,
-    len.shape_geog,
+    len.shape_geog
 FROM bus_length AS len
 JOIN septa.bus_trips AS trips
     ON len.shape_id = trips.shape_id

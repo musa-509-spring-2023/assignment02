@@ -8,7 +8,7 @@ joined AS (
         hood.name
     FROM septa.bus_stops AS stops
     INNER JOIN azavea.neighborhoods AS hood
-      ON st_intersects(st_setsrid(stops.geog::geography, 4326), st_setsrid(hood.geog::geography, 4326))
+        ON st_intersects(st_setsrid(stops.geog::geography, 4326), st_setsrid(hood.geog::geography, 4326))
 ),
 
 accessible_stops AS (

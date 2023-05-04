@@ -4,7 +4,7 @@ septa_bus_stop_blockgroups as (
     select
         stops.stop_id,
         bg.statefp as statefp,
-        bg.countyfp as countyfp
+        bg.countyfp as countyfp,
         '1500000US' || bg.geoid as geoid,
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg

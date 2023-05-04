@@ -17,5 +17,5 @@ JOIN septa.bus_trips AS trips
     ON len.shape_id = trips.shape_id
 JOIN septa.bus_routes AS routes
     ON trips.route_id = routes.route_id
-ORDER BY shape_length DESC
+ORDER BY len.shape_length DESC
 LIMIT 2

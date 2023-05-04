@@ -2,8 +2,8 @@ SELECT
     bus_stops.stop_id AS stop_id,
     bus_stops.stop_name AS stop_name,
     bus_stops.stop_lon AS stop_lon,
-    bus_stops.stop_lat AS sop_lat
-    t.dist || '' || 'meters from' || t.address_name AS stop_desc,
+    bus_stops.stop_lat AS sop_lat,
+    t.dist || '' || 'meters from' || t.address_name AS stop_desc
 FROM septa.bus_stops
 CROSS JOIN LATERAL (
     SELECT

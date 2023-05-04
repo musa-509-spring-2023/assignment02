@@ -5,7 +5,7 @@ septa_bus_stop_blockgroups as (
         stops.stop_id,
         bg.statefp as statefp,
         bg.countyfp as countyfp,
-        '1500000US' || bg.geoid as geoid,
+        '1500000US' || bg.geoid as geoid
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
         on st_dwithin(st_setsrid(stops.geog::geography, 4326), st_setsrid(bg.geog::geography, 4326), 800)

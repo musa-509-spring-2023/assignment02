@@ -7,8 +7,8 @@ SELECT
 FROM septa.bus_stops
 CROSS JOIN LATERAL (
     SELECT
-        ST_SETSRID(pwd_parcels.geog::geography, 4326) <-> ST_SETSRID(bus_stops.geog::geography, 4326) AS dist,
-        pwd_parcels.address AS address_name
+        pwd_parcels.address AS address_name,
+        ST_SETSRID(pwd_parcels.geog::geography, 4326) <-> ST_SETSRID(bus_stops.geog::geography, 4326) AS dist
     FROM phl.pwd_parcels
     ORDER BY t.dist DESC
     LIMIT 1

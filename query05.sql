@@ -1,3 +1,3 @@
- /* I rate the neighborhood accesibility by the 
+/* I rate the neighborhood accesibility by the
  percentage of bus stops with wheel chair access to the total bus tops within the neighborhood.
  */

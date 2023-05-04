@@ -8,12 +8,12 @@ joined AS (
         hood.name
     FROM septa.bus_stops AS stops
     INNER JOIN azavea.neighborhoods AS hood
-    ON st_intersects(st_setsrid(stops.geog::geography, 4326), st_setsrid(hood.geog::geography, 4326))
+      ON st_intersects(st_setsrid(stops.geog::geography, 4326), st_setsrid(hood.geog::geography, 4326))
 ),
 
 accessible_stops AS (
     SELECT
-        name, 
+        name,
         count(*) AS accessible
     FROM joined AS stops
     WHERE stops.wheelchair_boarding = 1
@@ -22,7 +22,7 @@ accessible_stops AS (
 
 total_stops AS (
     SELECT
-        name, 
+        name,
         count(*) AS total
     FROM joined AS stops
     GROUP BY name
@@ -35,7 +35,7 @@ SELECT
     accessible_stops.accessible / total_stops.total AS accessibility_metric
 FROM accessible_stops
 LEFT JOIN total_stops
-ON accessible_stops.name = total_stops.name
-GROUP BY accessible_stops.name,accessible_stops.accessible,total_stops.total
+    ON accessible_stops.name = total_stops.name
+GROUP BY accessible_stops.name, accessible_stops.accessible, total_stops.total
 ORDER BY accessibility_metric DESC
 LIMIT 5

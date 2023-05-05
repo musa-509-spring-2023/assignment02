@@ -7,7 +7,7 @@ WITH bus_length AS (
     GROUP BY shapes.shape_id
 ),
 
-trips AS (
+WITH trips AS (
     SELECT
         bus_trips.trip_headsign,
         bus_trips.shape_id,
@@ -15,7 +15,7 @@ trips AS (
         bus_length.shape_length,
         bus_length.shape_geog,
         bus_length.shape_id
-    FROM bus_length
+    FROM septa.bus_length 
     JOIN septa.bus_trips
         ON (bus_length.shape_id = septa.bus_trips.shape_id)
 ),

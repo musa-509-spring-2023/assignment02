@@ -7,7 +7,7 @@ WITH bus_length AS (
     GROUP BY shapes.shape_id
 ),
 
-WITH trips AS (
+trips AS (
     SELECT
         bus_trips.trip_headsign,
         bus_trips.shape_id,

@@ -1,17 +1,35 @@
-SELECT
-    bus_stops.stop_id AS stop_id,
-    bus_stops.stop_name AS stop_name,
-    bus_stops.stop_lon AS stop_lon,
-    bus_stops.stop_lat AS sop_lat,
-    t.dist || '' || 'meters from' || t.address_name AS stop_desc
-FROM septa.bus_stops
-CROSS JOIN LATERAL (
-    SELECT
-        pwd_parcels.address AS address_name,
-        ST_SETSRID(pwd_parcels.geog::geography, 4326) <-> ST_SETSRID(bus_stops.geog::geography, 4326) AS dist
-    FROM phl.pwd_parcels
-    ORDER BY dist DESC
-    LIMIT 1
-) AS t
-ORDER BY t.dist DESC
-LIMIT 1
+WITH myplace AS
+(SELECT *
+ FROM phl.pwd_parcels
+ WHERE address = '3201 RACE ST' 
+),
+
+lastt AS (
+  SELECT 
+    stops.stop_id, 
+    stops.stop_name, 
+    stops.stop_lon, 
+    stops.stop_lat, 
+    stops.geog,
+    myplace.geog,
+    ST_Distance(ST_SetSRID(ST_Centroid(myplace.geog), 4326), ST_SetSRID(stops.geog, 4326)) AS dist,
+    CASE 
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 22.5 AND 67.5 THEN 'NE'
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 67.5 AND 112.5 THEN 'E'
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 112.5 AND 157.5 THEN 'SE'
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 157.5 AND 202.5 THEN 'S'
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 202.5 AND 247.5 THEN 'SW'
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 247.5 AND 292.5 THEN 'W'
+      WHEN ST_Azimuth(ST_Centroid(myplace.geog), stops.geog) BETWEEN 292.5 AND 337.5 THEN 'NW'
+      ELSE 'N'
+    END AS direction
+  FROM septa.bus_stops AS stops, myplace
+)
+
+SELECT 
+stop_id, 
+stop_name, 
+CONCAT (dist, ' meters ', direction, ' of My Apartment') AS stop_desc, 
+stop_lon, 
+stop_lat
+FROM lastt

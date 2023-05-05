@@ -8,28 +8,28 @@ WITH bus_length AS (
 ),
 
 trips AS (
-	SELECT
-    bus_trips.trip_headsign,
-	bus_trips.shape_id,
-	bus_trips.route_id,
-    bus_length.shape_length,
-    bus_length.shape_geog,
-	bus_length.shape_id
-	FROM bus_length
-	JOIN septa.bus_trips 
-      ON bus_length.shape_id = bus_trips.shape_id
+    SELECT
+        bus_trips.trip_headsign,
+	    bus_trips.shape_id,
+	    bus_trips.route_id,
+        bus_length.shape_length,
+        bus_length.shape_geog,
+	    bus_length.shape_id
+    FROM bus_length
+    JOIN septa.bus_trips
+        ON bus_length.shape_id = bus_trips.shape_id
 ),
 
 lastt AS (
-   SELECT
-    routes.route_short_name,
-    trips.trip_headsign,
-    trips.shape_length,
-    trips.shape_geog,
-	trips.route_id
-   FROM trips
-   JOIN septa.bus_routes AS routes
-    ON trips.route_id = routes.route_id
+    SELECT
+        routes.route_short_name,
+        trips.trip_headsign,
+        trips.shape_length,
+        trips.shape_geog,
+	    trips.route_id
+    FROM trips
+    JOIN septa.bus_routes AS routes
+        ON trips.route_id = routes.route_id
 )
 
 SELECT DISTINCT

@@ -17,7 +17,7 @@ trips AS (
         bus_length.shape_id
     FROM bus_length
     JOIN septa.bus_trips
-        ON bus_length.shape_id = bus_trips.shape_id
+        ON (bus_length.shape_id = bus_trips.shape_id)
 ),
 
 lastt AS (
@@ -29,7 +29,7 @@ lastt AS (
         trips.route_id
     FROM trips
     JOIN septa.bus_routes AS routes
-        ON trips.route_id = routes.route_id
+        ON (trips.route_id = routes.route_id)
 )
 
 SELECT DISTINCT

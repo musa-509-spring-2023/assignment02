@@ -20,6 +20,3 @@ select
     ) as stop_desc
 from septa.rail_stops as stops
 left join counts on stops.stop_id = counts.stop_id;
-
-
-

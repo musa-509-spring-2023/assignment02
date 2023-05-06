@@ -60,3 +60,4 @@ select
 from neighborhood_accessibility as na
 inner join azavea.neighborhoods as n on na.name = n.name
 order by na.accessibility_score desc;
+

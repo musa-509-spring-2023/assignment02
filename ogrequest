@@ -1,0 +1,33 @@
+ogr2ogr `
+    -f "PostgreSQL" `
+    PG:"host=localhost port=5432 dbname=hw user=postgres password=001215" `
+    -nln phl.pwd_parcels `
+    -nlt MULTIPOLYGON `
+    -lco GEOMETRY_NAME=geog `
+    -lco GEOM_TYPE=GEOGRAPHY `
+    -overwrite `
+    "E:\MUSA-SPRING\MUSA509CloudComputing\homework\2\PWD_PARCELS\PWD_PARCELS.shp"
+
+
+ogr2ogr `
+    -f "PostgreSQL" `
+    PG:"host=localhost port=5432 dbname=hw user=postgres password=001215" `
+    -nln azavea.neighborhoods `
+    -nlt MULTIPOLYGON `
+    -lco GEOMETRY_NAME=geog `
+    -lco GEOM_TYPE=GEOGRAPHY `
+    -overwrite `
+    "E:\MUSA-SPRING\MUSA509CloudComputing\homework\2\Neighborhoods_Philadelphia.geojson"
+
+
+ogr2ogr `
+    -f "PostgreSQL" `
+    PG:"host=localhost port=5432 dbname=hw user=postgres password=001215" `
+    -nln census.blockgroups_2020 `
+    -nlt MULTIPOLYGON `
+    -lco GEOMETRY_NAME=geog `
+    -lco GEOM_TYPE=GEOGRAPHY `
+    -overwrite `
+    "E:\MUSA-SPRING\MUSA509CloudComputing\homework\2\tl_2020_42_bg\tl_2020_42_bg.shp"
+
+

@@ -1,7 +1,6 @@
 CREATE INDEX bus_routes_geog_idx ON phl.pwd_parcels USING gist (geog);
 CREATE INDEX bus_stops_geog_idx ON septa.bus_stops USING gist (geog);
 
-
 WITH
 the_route AS (
     SELECT
@@ -18,28 +17,29 @@ route_length AS (
     SELECT
         the_route.shape_id,
         the_route.shape_geog,
-        ST_LENGTH(the_route.shape_geog) AS shape_length
+        ST_LENGTH(the_route.shape_geog::geography) AS shape_length
     FROM the_route
+	GROUP BY shape_id, shape_geog
 ),
 
 final_table AS (
     SELECT
-        routes.route_short_name,
-        shape_id,
+        route_length.shape_id,
         route_length.shape_length,
-        bus_trips.trip_headsign,
+        trips.trip_headsign,
         route_length.shape_geog,
-        route_id
+        trips.route_id
     FROM route_length
-    INNER JOIN septa.bus_trips USING (shape_id)
-    INNER JOIN septa.bus_routes AS routes USING (route_id)
+    INNER JOIN septa.bus_trips AS trips USING (shape_id)
 )
 
 SELECT DISTINCT
-    route_short_name,
-    trip_headsign,
-    shape_geog,
-    shape_length
-FROM final_table
+    routes.route_short_name,
+    final_table.trip_headsign,
+    final_table.shape_geog,
+    final_table.shape_length
+FROM septa.bus_routes AS routes 
+INNER JOIN final_table 
+	ON final_table.route_id = routes.route_id
 ORDER BY shape_length DESC
 LIMIT 2

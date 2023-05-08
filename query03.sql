@@ -21,5 +21,5 @@ SELECT
     ORDER BY dist
     LIMIT 1			
 ) AS join_table
-ORDER BY dist DESC
+ORDER BY dist ASC
 LIMIT 5

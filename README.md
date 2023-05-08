@@ -199,11 +199,19 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
+    My accessibility metric prioritizes the highest density of wheelchair-accessible bus stops in a neighborhood.
+    I looked at the bus_stops table from septa and saw wheelchair_boarding as a metric whether the stop is accessible for someone someone using a wheelchair. I filtered for the stops that either had a 1 (yes, accessible) or a 0 but their parent station was accessible - meaning it was accessible according to GTFS documentation. Then I took the density of the accessible stops because some neighborhoods are larger than others, and might have more accessible stops, but the stops could be farther from each other than another neighorhood with fewer stops. Ultimately, neighborhoods are made-up boundaries and being closer to an accessible stop is more important, so density is prioritized.
+    With more time I would look at *only* the accessible stops that a vehicle with capacity to accomodate someone with a wheelchair would stop at. This would require looking at septa.bus_trips and finding which vehicles are accessible and where they intersect with accessible stops. With even *more* time, I would weight those vehicles based on magnitude of operation time.
+
     **Description:**
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
+    The top 5 neighborhoods according to my accessibility metric are Washington Square, Newbold, Hawthorne, Francisville and Spring Garden.
+
 7.  What are the _bottom five_ neighborhoods according to your accessibility metric?
+
+    The bottom 5 neighborhoods according to my accessibility metric are West Torresdale, the Navy Yard, the airport, "industrial", and Crestmont Farms
 
     **Both #6 and #7 should have the structure:**
     ```sql

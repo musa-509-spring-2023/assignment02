@@ -140,6 +140,7 @@ There are several datasets that are prescribed for you to use in this part. Your
 
 **Note, when tests aren't passing, I do take logic for solving problems into account _for partial credit_ when grading. When in doubt, write your thinking for solving the problem even if you aren't able to get a full response.**
 
+
 ## Questions
 
 1.  Which **eight** bus stop have the largest population within 800 meters? As a rough estimation, consider any block group that intersects the buffer as being part of the 800 meter buffer.

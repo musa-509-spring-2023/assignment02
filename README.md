@@ -225,6 +225,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
 8.  With a query, find out how many census block groups Penn's main campus fully contains. Discuss which dataset you chose for defining Penn's campus.
 
+There are 13 census block groups in Penn's campus. I looked on google maps and recorded the coordinates of points I felt represented the boundary of Penn's official campus and then made a polygon out of that to campure 13 block groups.
+
     **Structure (should be a single value):**
     ```sql
     (
@@ -236,6 +238,7 @@ There are several datasets that are prescribed for you to use in this part. Your
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
+The geoid of the block group that contains Meyerson Hall is 421010369022.
     **Structure (should be a single value):**
     ```sql
     (
@@ -244,6 +247,8 @@ There are several datasets that are prescribed for you to use in this part. Your
     ```
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. SQL's `CASE` statements may be helpful for some operations.
+
+I looked at the neighborhoods each stop is in and manipulated the string of each neighborhood to read in a sentence.
 
     **Structure:**
     ```sql

@@ -1,9 +1,3 @@
-/*
-  Which bus stop has the largest population within 800 meters? As a rough
-  estimation, consider any block group that intersects the buffer as being part
-  of the 800 meter buffer.
-*/
-
 with
 
 septa_bus_stop_blockgroups as (
@@ -28,6 +22,8 @@ select
     pop.estimated_pop_800m,
     stops.geog
 from septa_bus_stop_surrounding_population as pop
+
 inner join septa.bus_stops as stops using (stop_id)
-order by pop.estimated_pop_800m desc
+where pop.estimated_pop_800m > 500
+order by pop.estimated_pop_800m asc
 limit 8

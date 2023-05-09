@@ -41,3 +41,16 @@ set geog = st_makepoint(stop_lon, stop_lat)::geography;
 create index if not exists septa_bus_stops__geog__idx
 on septa.bus_stops using gist
 (geog);
+
+-- thanks min
+ALTER TABLE census.blockgroups_2020 ADD COLUMN geog_4326 geography(Geometry, 4326);
+UPDATE census.blockgroups_2020 SET geog_4326 = ST_Transform(geog::geometry, 4326)::geography;
+ALTER TABLE census.blockgroups_2020 DROP COLUMN geog;
+ALTER TABLE census.blockgroups_2020 RENAME COLUMN geog_4326 TO geog;
+
+
+
+alter table phl.pwd_parcels
+add column if not exists geog geometry;
+update phl.pwd_parcels
+set geog = st_transform(geog::geometry, 4326)::geography;

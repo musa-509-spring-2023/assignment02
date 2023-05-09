@@ -1,0 +1,22 @@
+ogr2ogr `
+    -f "PostgreSQL" `
+    PG:"host=localhost port=5432 dbname=assn2 user=postgres password=mjumbeisthebest" `
+    -nln azavea.neighborhoods `
+    -nlt MULTIPOLYGON `
+    -lco GEOMETRY_NAME=geog `
+    -lco GEOM_TYPE=GEOGRAPHY `
+    -overwrite `
+    "data/Neighborhoods_Philadelphia.geojson.txt"
+
+
+csvsql `
+  --db postgresql://postgres:postgres@localhost:5432/assn2 `
+  --tables csvkit_population_2020 `
+  --create-if-not-exists `
+  --insert `
+  --overwrite `
+  data/population_2020.csv
+
+COPY census.population_2020
+FROM  "C:\Users\cchue\Documents\Penn MUSA\Spring\Cloud Computing\assignment02\data\population_2020.csv"
+WITH (FORMAT csv, HEADER true);

@@ -43,12 +43,12 @@ all_accessible_stops AS (
     SELECT * FROM accessible_children
 ),
 
-aggregate_all AS(
+aggregate_all AS (
     SELECT
         nhoods.name,
-        COUNT(stop_id) AS total_stops
+        COUNT(bus_stops.stop_id) AS total_stops
     FROM bus_stops
-    INNER JOIN azavea.neighborhoods as nhoods
+    INNER JOIN azavea.neighborhoods AS nhoods
         ON ST_INTERSECTS(nhoods.geog, bus_stops.geog)
     GROUP BY nhoods.name
 ),

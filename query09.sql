@@ -7,7 +7,7 @@ functions like that are not allowed.
 
 select bg.geoid as geo_id
 from census.blockgroups_2020 as bg
-join phl.pwd_parcels as parcel
+left join phl.pwd_parcels as parcel
     on st_intersects(bg.geog, parcel.geog)
 where parcel.address = '220-30 S 34TH ST'
 

@@ -33,8 +33,8 @@ accessible_children AS (
 ),
 
 all_accessible_stops AS (
-    SELECT * FROM accessible_stations 
-UNION
+    SELECT * FROM accessible_stations
+    UNION
     SELECT * FROM accessible_children
 ),
 

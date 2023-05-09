@@ -11,7 +11,8 @@ bus_shape as (
         shape_id,
         ST_MAKELINE(ARRAY_AGG(
             ST_SETSRID(ST_MAKEPOINT(shape_pt_lon, shape_pt_lat), 4326)
-            order by shape_pt_sequence)) as shape_geography
+            order by shape_pt_sequence
+    )) as shape_geography
     from septa.bus_shapes
     group by shape_id
 ),

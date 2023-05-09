@@ -1,6 +1,6 @@
-/* 
+/*
 CHECK
-Using the bus_shapes, bus_routes, and bus_trips tables 
+Using the bus_shapes, bus_routes, and bus_trips tables
 from GTFS bus feed, find the two routes with the longest trips.
 */
 
@@ -9,7 +9,8 @@ with
 bus_shape as (
     select
         shape_id,
-        ST_MAKELINE(ARRAY_AGG(ST_SETSRID(ST_MAKEPOINT(shape_pt_lon, shape_pt_lat), 4326)
+            ST_MAKELINE(ARRAY_AGG(
+            ST_SETSRID(ST_MAKEPOINT(shape_pt_lon, shape_pt_lat), 4326)
         order by shape_pt_sequence)) as shape_geography
     from septa.bus_shapes
     group by shape_id
@@ -34,7 +35,7 @@ bus_trips as (
     from septa.bus_trips
     inner join bus_shape_length
         on septa.bus_trips.shape_id = bus_shape_length.shape_id
-)
+    )
 
 select distinct
     route_short_name,

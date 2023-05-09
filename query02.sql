@@ -1,8 +1,8 @@
 /*
-Which eight bus stops have the smallest population above 500 
-people inside of Philadelphia within 800 meters of the stop 
-(Philadelphia county block groups have a geoid prefix 
-of 42101 -- that's 42 for the state of PA, and 101 for 
+Which eight bus stops have the smallest population above 500
+people inside of Philadelphia within 800 meters of the stop
+(Philadelphia county block groups have a geoid prefix
+of 42101 -- that's 42 for the state of PA, and 101 for
 Philadelphia county)?
 */
 
@@ -15,7 +15,7 @@ septa_bus_stop_blockgroups as (
     from septa.bus_stops as stops
     inner join census.blockgroups_2020 as bg
         on st_dwithin(stops.geog, bg.geog, 800)
-		where LEFT(bg.geoid, 5) = '42101'
+    where left(bg.geoid, 5) = '42101'
 ),
 
 septa_bus_stop_surrounding_population as (
@@ -24,7 +24,7 @@ septa_bus_stop_surrounding_population as (
         sum(pop.total) as estimated_pop_800m
     from septa_bus_stop_blockgroups as stops
     inner join census.population_2020 as pop using (geoid)
-	  where pop.total > 500
+    where pop.total > 500
     group by stops.stop_id
 )
 

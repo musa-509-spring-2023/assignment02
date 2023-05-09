@@ -19,7 +19,7 @@ route_length AS (
         the_route.shape_geog,
         ST_LENGTH(the_route.shape_geog::geography) AS shape_length
     FROM the_route
-	GROUP BY shape_id, shape_geog
+    GROUP BY shape_id, shape_geog
 ),
 
 final_table AS (
@@ -38,8 +38,8 @@ SELECT DISTINCT
     final_table.trip_headsign,
     final_table.shape_geog,
     final_table.shape_length
-FROM septa.bus_routes AS routes 
-INNER JOIN final_table 
-	ON final_table.route_id = routes.route_id
+FROM septa.bus_routes AS routes
+INNER JOIN final_table
+    ON final_table.route_id = routes.route_id
 ORDER BY shape_length DESC
 LIMIT 2

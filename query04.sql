@@ -6,7 +6,8 @@ bus_shapes as (
         ST_MAKELINE(
             ARRAY_AGG(
                 ST_SETSRID(ST_MAKEPOINT(shape_pt_lon, shape_pt_lat), 4326)
-                order by shape_pt_sequence)
+                order by shape_pt_sequence
+        ) -- noqa: L003
         ) as shape_geog
     from septa.bus_shapes
     group by shape_id

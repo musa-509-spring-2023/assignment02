@@ -6,76 +6,49 @@
 
 -- Description:
 
+-- I use two datsets 'septa.bus_stops' and 'azavea.neighborhoods' to calculate the wheelchair accessibility.
+-- First, select wheelchair_boarding, stop_name, geog from 'septa.bus_stops' table. The CASE statement is used to create a column named wc that indicates if the stop is wheelchair accessible, with the values YES and NO.
+-- THen, select geog, neighborhood_name and area from 'azavea.neighborhoods' table.
+-- The third CTE 'neighborhood_wheelchair_count' joins the joins the wc_stop and nh_area CTEs and groups by neighborhood name and area. It counts the number of wheelchair accessible (wc_yes) and inaccessible (wc_no) bus stops for each neighborhood.
+-- Finally, the main query selects the neighborhood_name, calculates the accessibility_metric, which is the number of wheelchair accessible bus stops per 10,000 square meters, rounds the result to two decimal places, and returns the number of num_bus_stops_accessible and num_bus_stops_inaccessible.
 
-WITH
--- calculate neighborhood pop
-block_pop AS (
+WITH 
+wc_stop AS (
     SELECT
-        geoid,
-        b.total,
-        a.geog
-    FROM census.blockgroups_2020 AS a
-    INNER JOIN census.population_2020 AS b USING (geoid)
-),
-
-neigh_pop AS (
-    SELECT
-        n.name,
-        p.total,
-        n.geog
-    FROM azavea.neighborhoods AS n
-    INNER JOIN block_pop AS p
-        ON ST_WITHIN(ST_TRANSFORM(p.geog::geometry, 4236), ST_TRANSFORM(n.geog::geometry, 4236))
-),
-
-neight_pop_tot AS (
-    SELECT
-        name,
-        SUM(total) AS pop
-    FROM neigh_pop
-    GROUP BY name
-),
-
--- bus_stop with wheelchair boarding
-bus_wheelchair AS (
-    SELECT *
+        wheelchair_boarding,
+        stop_name,
+        geog,
+        CASE
+            WHEN wheelchair_boarding = 1 THEN 'YES'
+            WHEN wheelchair_boarding = 2 THEN 'NO'
+        END AS wc
     FROM septa.bus_stops
-    WHERE wheelchair_boarding = '1'
 ),
 
-WITH wheelchair_stops AS (
-  SELECT * FROM septa.bus_stops WHERE wheelchair_boarding = '1'
+nh_area AS (
+    SELECT
+        geog,
+        listname AS neighborhood_name,
+        shape_area AS area
+    FROM azavea.neighborhoods
 ),
-neighborhoods AS (
-  SELECT name, geog, ST_AREA(geog::geography) AS area FROM azavea.neighborhoods
-),
-wheelchair_stops_buffered AS (
-  SELECT ST_INTERSECTION(n.geog, ST_BUFFER(s.geog::geography, 210)) AS intersection_geog, s.stop_id, s.stop_name
-  FROM wheelchair_stops AS s, neighborhoods AS n
-  WHERE ST_DWithin(s.geog::geography, n.geog::geography, 210)
-),
-neighborhoods_access AS (
-  SELECT n.name, SUM(ST_AREA(ws.intersection_geog::geography)) AS access_area
-  FROM neighborhoods AS n, wheelchair_stops_buffered AS ws
-  WHERE ST_Intersects(ws.intersection_geog::geography, n.geog::geography)
-  GROUP BY n.name
-),
-neighborhoods_pop AS (
-  SELECT n.name, SUM(p.total) AS pop
-  FROM neighborhoods AS n, census.population_2020 AS p
-  WHERE ST_Within(p.geog::geometry, n.geog::geometry)
-  GROUP BY n.name
-),
-neighborhoods_combined AS (
-  SELECT n.name, n.geog, n.area, na.access_area, np.pop
-  FROM neighborhoods AS n, neighborhoods_access AS na, neighborhoods_pop AS np
-  WHERE n.name = na.name AND n.name = np.name
-),
-accessibility AS (
-  SELECT nc.name, (nc.access_area / nc.area) * nc.pop AS accessibility_metric, nc.geog
-  FROM neighborhoods_combined AS nc
-  ORDER BY accessibility_metric DESC
-  LIMIT 5
+
+neighborhood_wheelchair_count AS (
+    SELECT
+        nh_area.neighborhood_name,
+        nh_area.area,
+        COUNT(CASE wc_stop.wc WHEN 'YES' THEN 1 END) AS wc_yes,
+        COUNT(CASE wc_stop.wc WHEN 'NO' THEN 1 END) AS wc_no
+    FROM wc_stop
+    INNER JOIN nh_area
+        ON ST_Intersects(wc_stop.geog, nh_area.geog)
+    GROUP BY nh_area.neighborhood_name, nh_area.area
 )
-SELECT accessibility.name AS neighborhood_name, accessibility.accessibility_metric, accessibility.geog AS neighborhood_geog
-FROM accessibility
+
+SELECT
+    neighborhood_name,
+	CAST(wc_yes / area * 100000 AS numeric(10, 2)) AS accessibility_metric,
+    wc_yes AS num_bus_stops_accessible,
+    wc_no AS num_bus_stops_inaccessible
+FROM neighborhood_wheelchair_count
+ORDER BY accessibility_metric DESC;

@@ -12,5 +12,4 @@ cross join lateral (
         order by dist  -- noqa
         limit 1
 ) stops -- noqa: L011
-order by dist desc;
-
+order by dist desc; -- noqa: L027

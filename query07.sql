@@ -22,14 +22,14 @@ neighorhoods_area as (
 
 neig_wheel_count as (
     select
+        neighorhoods_area.neighborhood_name,
+        neighorhoods_area.area_km,
         count(
             case wheelchair_stop.wheelchair when 'YES' then 1 end
         ) as with_wheelchair,
         count(
             case wheelchair_stop.wheelchair when 'NO' then 1 end
-        ) as no_wheelchair,
-        neighorhoods_area.neighborhood_name,
-        neighorhoods_area.area_km
+        ) as no_wheelchair
     from wheelchair_stop
     inner join neighorhoods_area
         on st_intersects(wheelchair_stop.geog, neighorhoods_area.geog)
@@ -38,9 +38,9 @@ neig_wheel_count as (
 
 select
     neighborhood_name,
-    with_wheelchair / area_km as accessibility_metric,
     with_wheelchair as num_bus_stops_accessible,
-    no_wheelchair as num_bus_stops_inaccessible
+    no_wheelchair as num_bus_stops_inaccessible,
+    with_wheelchair / area_km as accessibility_metric
 from neig_wheel_count
 order by accessibility_metric
 limit 5

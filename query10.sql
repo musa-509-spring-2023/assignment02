@@ -30,14 +30,14 @@ septa_stops_cheese as (
         stops.stop_lat as stop_lat
     from septa_rail as stops -- noqa: L031
     cross join lateral (
-            select
-                cheese.user_note,
-                cheese.geog,
-                cheese.geog::geography
-                <-> stops.stop_geog::geography as dist -- noqa: PRS
-            from advanture.cheese as cheese -- noqa: L031
-            order by dist -- noqa
-            limit 1
+        select
+            cheese.user_note,
+            cheese.geog,
+            cheese.geog::geography
+            <-> stops.stop_geog::geography as dist -- noqa: PRS
+        from advanture.cheese as cheese -- noqa: L031
+        order by dist -- noqa
+        limit 1
     ) cheese -- noqa: L011
 )
 

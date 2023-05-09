@@ -9,9 +9,9 @@ with
 bus_shape as (
     select
         shape_id,
-            ST_MAKELINE(ARRAY_AGG(
+        ST_MAKELINE(ARRAY_AGG(
             ST_SETSRID(ST_MAKEPOINT(shape_pt_lon, shape_pt_lat), 4326)
-        order by shape_pt_sequence)) as shape_geography
+            order by shape_pt_sequence)) as shape_geography
     from septa.bus_shapes
     group by shape_id
 ),
@@ -35,14 +35,14 @@ bus_trips as (
     from septa.bus_trips
     inner join bus_shape_length
         on septa.bus_trips.shape_id = bus_shape_length.shape_id
-    )
+)
 
 select distinct
-    route_short_name,
+    septa.route_short_name,
     bus_trips.trip_headsign as trip_headsign,
     bus_trips.shape_geog as shape_geog,
     bus_trips.shape_length as shape_length
-from septa.bus_routes
+from septa.bus_routes as septa
 inner join bus_trips
     on bus_routes.route_id = bus_trips.route_id
 order by bus_trips.shape_length desc

@@ -12,7 +12,7 @@ bus_stops AS (
 
 accessible_stations AS (
     SELECT * FROM bus_stops
-	WHERE wheelchair_boarding = 1
+    WHERE wheelchair_boarding = 1
 ),
 
 maybe_accessible_children AS (
@@ -22,7 +22,7 @@ maybe_accessible_children AS (
 
 accessible_children AS (
     SELECT
-        maybe_accessible_children.stop_id, 
+        maybe_accessible_children.stop_id,
         maybe_accessible_children.stop_name,
         maybe_accessible_children.parent_station,
         maybe_accessible_children.wheelchair_boarding,
@@ -33,14 +33,15 @@ accessible_children AS (
 ),
 
 all_accessible_stops AS (
-    SELECT * FROM accessible_stations UNION
+    SELECT * FROM accessible_stations 
+UNION
     SELECT * FROM accessible_children
 ),
 
 aggregate_all AS (
     SELECT
         nhoods.name,
-        COUNT(stop_id) AS total_stops
+        COUNT(bus_stops.stop_id) AS total_stops
     FROM bus_stops
     INNER JOIN azavea.neighborhoods AS nhoods
         ON ST_INTERSECTS(nhoods.geog, bus_stops.geog)

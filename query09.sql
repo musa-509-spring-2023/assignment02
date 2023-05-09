@@ -5,8 +5,7 @@ that contains Meyerson Hall.  ST_MakePoint() and
 functions like that are not allowed.
 */
 
-select
-    bg.geoid as geo_id
+select bg.geoid as geo_id
 from census.blockgroups_2020 as bg
 join phl.pwd_parcels as parcel
     on st_intersects(bg.geog, parcel.geog)

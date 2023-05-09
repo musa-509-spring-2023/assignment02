@@ -21,13 +21,13 @@ accessible_stations AS (
 ),
 
 maybe_accessible_children AS (
-	SELECT * FROM bus_stops
-	WHERE wheelchair_boarding = 0 AND parent_station IS NOT NULL
+    SELECT * FROM bus_stops
+    WHERE wheelchair_boarding = 0 AND parent_station IS NOT NULL
 ),
 
 accessible_children AS (
-    SELECT 
-        maybe_accessible_children.stop_id, 
+    SELECT
+        maybe_accessible_children.stop_id,
         maybe_accessible_children.stop_name,
         maybe_accessible_children.parent_station,
         maybe_accessible_children.wheelchair_boarding,
@@ -38,14 +38,15 @@ accessible_children AS (
 ),
 
 all_accessible_stops AS (
-    SELECT * FROM accessible_stations UNION 
+    SELECT * FROM accessible_stations
+UNION
     SELECT * FROM accessible_children
 ),
 
-    aggregate_all AS (
+aggregate_all AS (
     SELECT
         nhoods.name,
-        COUNT(stop_id) AS total_stops
+        COUNT(bus_stops.stop_id) AS total_stops
     FROM bus_stops
     INNER JOIN azavea.neighborhoods AS nhoods
         ON ST_INTERSECTS(nhoods.geog, bus_stops.geog)
@@ -53,12 +54,12 @@ all_accessible_stops AS (
 ),
 
 accessible_aggregate AS (
-	SELECT
+    SELECT
         nhood.name AS neighborhood_name,
-        COUNT(stops.stop_name)/nhood.shape_area AS accessibility_metric,
+        COUNT(stops.stop_name) / nhood.shape_area AS accessibility_metric,
         COUNT(stops.stop_name) AS num_bus_stops_accessible
-	FROM all_accessible_stops AS stops
-    INNER JOIN azavea.neighborhoods as nhood
+    FROM all_accessible_stops AS stops
+    INNER JOIN azavea.neighborhoods AS nhood
         ON ST_INTERSECTS(nhood.geog, stops.geog)
     GROUP BY neighborhood_name, nhood.shape_area
 ),

@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "assignment2",
+            "database": "assignment2",
+            "username": "postgres"
+        }
+    ],
+    "sqlfluff.excludeRules": [
+        "L034"
+    ]
+}

@@ -45,7 +45,7 @@ aggregate_all AS (
     FROM bus_stops
     INNER JOIN azavea.neighborhoods AS nhoods
         ON ST_INTERSECTS(nhoods.geog, bus_stops.geog)
-    GROUP BY nhoods.name	
+    GROUP BY nhoods.name
 ),
 
 accessible_aggregate AS (

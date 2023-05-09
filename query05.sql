@@ -34,7 +34,7 @@ accessible_children AS (
 
 all_accessible_stops AS (
     SELECT * FROM accessible_stations
-    UNION 
+    UNION
     SELECT * FROM accessible_children
 ),
 
@@ -51,7 +51,7 @@ aggregate_all AS (
 accessible_aggregate AS (
     SELECT
         nhood.name AS neighborhood_name,
-        COUNT(stops.stop_name)/nhood.shape_area AS accessibility_metric,
+        COUNT(stops.stop_name) / nhood.shape_area AS accessibility_metric,
         COUNT(stops.stop_name) AS num_bus_stops_accessible
     FROM all_accessible_stops AS stops
     INNER JOIN azavea.neighborhoods AS nhood

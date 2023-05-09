@@ -199,7 +199,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Description: 
+**
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
@@ -224,7 +225,9 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    ** ANSWER: 13
+    Discussion: First, I traced a polygon around the appropriate streets, approximately from Market
+    Street to Curie Boulevard.  Then, I used ST_INTERSECTS to find the Census blockgroups (from the Census dataset) to count the number of instances occur within the given polygon boundary. **
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 
@@ -234,6 +237,10 @@ There are several datasets that are prescribed for you to use in this part. Your
         geo_id text
     )
     ```
+
+    ANSWER: "421010369022"
+    210 S 34th Street is not an available address,
+    so 220-30 S 34th is used as a proxy location.
 
 10. You're tasked with giving more contextual information to rail stops to fill the `stop_desc` field in a GTFS feed. Using any of the data sets above, PostGIS functions (e.g., `ST_Distance`, `ST_Azimuth`, etc.), and PostgreSQL string functions, build a description (alias as `stop_desc`) for each stop. Feel free to supplement with other datasets (must provide link to data used so it's reproducible), and other methods of describing the relationships. SQL's `CASE` statements may be helpful for some operations.
 

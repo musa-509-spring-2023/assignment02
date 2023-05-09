@@ -26,7 +26,8 @@ septa_bus_stop_surrounding_population as (
         sum(census.population_2020.total) as estimated_pop_800m
     from septa_bus_stop_blockgroups
     inner join
-        census.population_2020 on
+        census.population_2020
+        on
             septa_bus_stop_blockgroups.geoid = population_2020.geoid
 group by septa_bus_stop_blockgroups.stop_id -- noqa: L003
 )
@@ -37,7 +38,8 @@ select
     septa.bus_stops.geog
 from septa_bus_stop_surrounding_population
 inner join
-    septa.bus_stops on
+    septa.bus_stops
+    on
         septa_bus_stop_surrounding_population.stop_id = bus_stops.stop_id
 order by septa_bus_stop_surrounding_population.estimated_pop_800m desc
 limit 8

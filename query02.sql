@@ -6,8 +6,10 @@ stops_bg as (
         septa.bus_stops.geog
     from septa.bus_stops
     inner join census.blockgroups_2020
-        on st_dwithin(st_setsrid(septa.bus_stops.geog::geography, 4326),
-            st_setsrid(census.blockgroups_2020.geog::geography, 4326), 800)
+        on st_dwithin(
+            st_setsrid(septa.bus_stops.geog::geography, 4326),
+            st_setsrid(census.blockgroups_2020.geog::geography, 4326), 800
+            )
 ),
 
 pop as (

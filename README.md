@@ -199,7 +199,8 @@ There are several datasets that are prescribed for you to use in this part. Your
 
     Discuss your accessibility metric and how you arrived at it below:
 
-    **Description:**
+    **Description: In this question, I used the number of wheelchairs accessible bus stops in each neighborhood as my metric for evaluating neighborhoods. Based on the result of my code, I found Overbrook neighborhood as the most accessible neighborhood.**
+    
 
 6.  What are the _top five_ neighborhoods according to your accessibility metric?
 
@@ -224,7 +225,7 @@ There are several datasets that are prescribed for you to use in this part. Your
     )
     ```
 
-    **Discussion:**
+    **Discussion: The main campus of the University of Pennsylvania is located in University City from Schuylkill River to 40th Street. The campus is spread out and covers nearly the entire University City neighborhood. Thus, I used azavea.neighborhoods dataset to define Penn's campus, and select the data that has the name University City. Based on my code, I found that there are 11 block groups in University City. **
 
 9. With a query involving PWD parcels and census block groups, find the `geo_id` of the block group that contains Meyerson Hall. `ST_MakePoint()` and functions like that are not allowed.
 

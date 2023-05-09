@@ -9,7 +9,7 @@ stops_bg as (
         on st_dwithin(
             st_setsrid(septa.bus_stops.geog::geography, 4326),
             st_setsrid(census.blockgroups_2020.geog::geography, 4326), 800
-            )
+        )
 ),
 
 pop as (

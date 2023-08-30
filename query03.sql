@@ -27,3 +27,4 @@ CROSS JOIN LATERAl(
 ) stops
 ORDER BY distance DESC
 LIMIT 1
+
